@@ -1,0 +1,57 @@
+* {
+    @include base-layout();
+}
+
+*::after {
+    @include base-layout();
+}
+
+*::before {
+    @include base-layout();
+}
+
+li {
+    list-style-type: none;
+}
+
+.container {
+    max-width: 1240px;
+
+    margin: 0 auto;
+    padding: 0 1.5rem;
+
+    background-color: $bg-body;
+
+    @include from-computer-and-less {
+        max-width: 850px;
+        padding: initial;
+    }
+
+    @include from-tablette-and-less {
+        max-width: 620px;
+    }
+
+    @include from-extra-large-mobile-and-less {
+        max-width: 480px;
+        padding: 0 2rem;
+    }
+
+    @include from-large-mobile-and-less {
+        width: auto;
+        max-width: none;
+    }
+}
+
+.header {
+    width: 100%;
+}
+
+.main {
+    width: 100%;
+
+    @include from-large-mobile-and-less {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}

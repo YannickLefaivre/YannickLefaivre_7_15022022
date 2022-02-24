@@ -1,0 +1,60 @@
+.search-bar-input {
+    width: 100%;
+    height: $combobox-height;
+
+    margin-bottom: 1.5625rem;
+
+    padding: 1.5rem;
+
+    text-align: left;
+
+    color: $text-secondary;
+    background-color: $bg-light;
+
+    border: transparent;
+
+    @include rounded-border();
+
+    @for $i from 2 through 3 {
+        &:#{nth($interactive-state, $i)} {
+            @include search-bar-input-interactive-state();
+        }
+    }
+
+    @include from-large-mobile-and-less {
+        height: 3rem;
+    }
+
+    &--combobox {
+        width: 100%;
+        height: $combobox-height;
+        
+        margin-bottom: 0;
+
+        padding: $combobox-padding;
+
+        caret-color: $text-primary;
+
+        color: $text-primary;
+
+        background-color: transparent;
+
+        z-index: 4;
+    }
+
+    @for $i from 1 through 3 {
+        &--combobox:#{nth($interactive-state, $i)} {
+            outline: none;
+            border: none;
+        }
+    }
+
+    &--combobox::placeholder {
+        color: $text-primary;
+        opacity: 1;
+    }
+
+    &--combobox-placeholder-visible::placeholder {
+        opacity: .5;
+    }
+}

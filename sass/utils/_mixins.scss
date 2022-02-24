@@ -1,0 +1,84 @@
+/* Breakpoints mixins */
+
+@mixin from-extra-small-mobile-and-less {
+	@media screen and (max-width: map-get($breakpoints, xs-mobile)) {
+		@content;
+	}
+}
+
+@mixin from-small-mobile-and-less {
+	@media screen and (max-width: map-get($breakpoints, sm-mobile)) {
+		@content;
+	}
+}
+
+@mixin from-medium-mobile-and-less {
+	@media screen and (max-width: map-get($breakpoints, md-mobile)) {
+		@content;
+	}
+}
+
+@mixin from-large-mobile-and-less {
+	@media screen and (max-width: map-get($breakpoints, lg-mobile)) {
+		@content;
+	}
+}
+
+@mixin from-extra-large-mobile-and-less {
+	@media screen and (max-width: map-get($breakpoints, xl-mobile)) {
+		@content;
+	}
+}
+
+@mixin from-tablette-and-less {
+	@media screen and (max-width: map-get($breakpoints, tablette)) {
+		@content;
+	}
+}
+@mixin from-computer-and-less {
+	@media screen and (max-width: map-get($breakpoints, computer)) {
+		@content;
+	}
+}
+
+@mixin from-large-screen-and-less {
+	@media screen and (max-width: map-get($breakpoints, large-screen)) {
+		@content;
+	}
+}
+
+/*
+
+# Base style
+
+## Typography and layout
+
+*/
+
+@mixin base-layout() {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+@mixin lg-font-size {
+    font-size: $main-text-font-size;
+
+    @include from-large-mobile-and-less {
+        font-size: $main-text-font-size-mobile;
+    }
+}
+
+/* 
+
+# Appearence
+
+*/
+
+@mixin rounded-border() {
+    border-radius: $sm-bevel;
+}
+
+@mixin search-bar-input-interactive-state($color: $bg-black) {
+    border: medium dotted $color;
+}

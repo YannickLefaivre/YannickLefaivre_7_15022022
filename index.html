@@ -1,24 +1,255 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<head>
+		<!-- Base metatags -->
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet">
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap"
+			rel="stylesheet"
+		/>
 
-        <link rel="stylesheet" href="./public/styles/style.min.css">
+		<!-- Font Awesome -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+			integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
 
-        <title>Rechercher une recettes - Les petits plats</title>
-    </head>
-    
-    <body>
-		<header>
-		</header>
+		<!-- Website favicon -->
+		<link
+			rel="icon"
+			href="./public/images/logo.svg"
+			type="image/svg+xml"
+		/>
 
-		<main>
-		</main>
-    </body>
+		<!-- Custom CSS -->
+		<link rel="stylesheet" href="./public/styles/style.min.css" />
+
+		<title>Nos recettes - Les petits plats</title>
+	</head>
+
+	<body>
+		<div class="container">
+			<header class="header">
+				<nav class="navbar">
+					<a href="#" class="navbar-brand">
+						<img
+							src="./public/images/logo.svg"
+							alt="Page d'accueil de Les Petits Plats"
+						/>
+					</a>
+				</nav>
+			</header>
+
+			<main class="main">
+				<form
+					id="mainSearchBarForm"
+					action="#"
+					method="post"
+					class="search-bar-form"
+				>
+					<label class="sr-only" for="searchByWordInput"
+						>Recherche</label
+					>
+					<input
+						class="search-bar-input"
+						type="text"
+						id="searchByWordInput"
+						placeholder="Rechercher une recette..."
+					/>
+
+					<button
+						type="submit"
+						class="btn btn--search"
+						aria-label="Rechercher"
+					>
+						<span
+							class="fas fa-search lpp-icon btn--search__icon"
+						></span>
+					</button>
+				</form>
+
+				<div class="keywords-row">
+					<ul class="keywords-list"></ul>
+				</div>
+
+				<div class="filters-wrapper">
+					<form
+						id="filtersForm"
+						class="filter"
+						method="get"
+						action="#"
+						novalidate
+						autocomplete="off"
+					>
+						<label id="comboboxLabel" class="sr-only"
+							>Trier par</label
+						>
+
+						<!-- This structure was found on WAI ARIA Exemple document for designing a combobox. -->
+						<div
+							id="filterIngredients"
+							class="combobox-wrapper"
+						>
+							<div
+								role="combobox"
+								aria-owns="SearchByIngredientOptionsList"
+								aria-haspopup="listbox"
+								aria-expanded="false"
+								id="searchByIngredientCombobox"
+								class="combobox"
+							>
+								<span
+									class="combobox__search-bar-input-hint"
+									>Ingrédients</span
+								>
+								<input
+									type="text"
+									aria-autocomplete="list"
+									aria-controls="SearchByIngredientOptionsList"
+									aria-labelledby="comboboxLabel"
+									aria-activedescendant
+									id="searchByIngredientInput"
+									class="search-bar-input search-bar-input--combobox"
+								/>
+
+								<button
+									type="button"
+									tabindex="-1"
+									class="btn btn--combobox"
+									aria-label="Montrer les options de trie"
+								>
+									<span
+										class="fas fa-chevron-down btn--combobox__icon"
+									></span>
+								</button>
+							</div>
+
+							<ul
+								role="listbox"
+								aria-labelledby="comboboxLabel"
+								id="SearchByIngredientOptionsList"
+								class="option-list hidden-content"
+							></ul>
+						</div>
+
+						<!-- This structure was found on WAI ARIA Exemple document for designing a combobox. -->
+						<div
+							id="filterappliances"
+							class="combobox-wrapper combobox-wrapper--bg-appliance"
+						>
+							<div
+								role="combobox"
+								aria-owns="SearchByapplianceOptionsList"
+								aria-haspopup="listbox"
+								aria-expanded="false"
+								id="searchByapplianceCombobox"
+								class="combobox"
+							>
+								<span
+									class="combobox__search-bar-input-hint"
+									>Appareils</span
+								>
+								<input
+									type="text"
+									aria-autocomplete="list"
+									aria-controls="SearchByapplianceOptionsList"
+									aria-labelledby="comboboxLabel"
+									aria-activedescendant
+									id="searchByapplianceInput"
+									class="search-bar-input search-bar-input--combobox"
+								/>
+
+								<button
+									type="button"
+									tabindex="-1"
+									class="btn btn--combobox"
+									aria-label="Montrer les options de trie"
+								>
+									<span
+										class="fas fa-chevron-down btn--combobox__icon"
+									></span>
+								</button>
+							</div>
+
+							<ul
+								role="listbox"
+								aria-labelledby="comboboxLabel"
+								id="SearchByapplianceOptionsList"
+								class="option-list hidden-content"
+							></ul>
+						</div>
+
+						<!-- This structure was found on WAI ARIA Exemple document for designing a combobox. -->
+						<div
+							id="filterUstensils"
+							class="combobox-wrapper combobox-wrapper--bg-ustensils"
+						>
+							<div
+								role="combobox"
+								aria-owns="SearchByUstensilsOptionsList"
+								aria-haspopup="listbox"
+								aria-expanded="false"
+								id="searchByUstensilsCombobox"
+								class="combobox"
+							>
+								<span
+									class="combobox__search-bar-input-hint"
+									>Ustensiles</span
+								>
+								<input
+									type="text"
+									aria-autocomplete="list"
+									aria-controls="SearchByUstensilsOptionsList"
+									aria-labelledby="comboboxLabel"
+									aria-activedescendant
+									id="searchByUstensilsInput"
+									class="search-bar-input search-bar-input--combobox"
+								/>
+
+								<button
+									type="button"
+									tabindex="-1"
+									class="btn btn--combobox"
+									aria-label="Montrer les options de trie"
+								>
+									<span
+										class="fas fa-chevron-down btn--combobox__icon"
+									></span>
+								</button>
+							</div>
+
+							<ul
+								role="listbox"
+								aria-labelledby="comboboxLabel"
+								id="SearchByUstensilsOptionsList"
+								class="option-list hidden-content"
+							></ul>
+						</div>
+					</form>
+				</div>
+
+				<section class="recipes-card-grid">
+					<h1 class="sr-only">Galerie de recettes</h1>
+				</section>
+			</main>
+		</div>
+
+		<script src="./scripts/pages/index.js" type="module"></script>
+	</body>
 </html>

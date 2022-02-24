@@ -1,0 +1,134 @@
+.combobox-wrapper {
+	width: 10.625rem;
+	background-color: $bg-primary;
+	overflow: hidden;
+
+	@include rounded-border();
+
+	z-index: 1;
+
+	&--dropdown-open {
+		width: auto;
+		max-width: $combobox-max-width;
+		height: auto;
+
+		@include from-tablette-and-less {
+			width: 28rem;
+		}
+
+		.btn--combobox {
+			right: 1.75rem;
+		}
+
+		@for $i from 2 through 3 {
+			.search-bar-input--combobox:#{nth($interactive-state, $i)} {
+				@include search-bar-input-interactive-state();
+			}
+		}
+
+		.search-bar-input--combobox::placeholder {
+			color: change-color($text-primary, $alpha: 0.5);
+		}
+	}
+
+	@each $filter, $color in $alt-filters-background-color {
+		&--#{$filter} {
+			background-color: $color;
+
+			.option-list__item:hover {
+				background-color: scale-color(
+					$color,
+					$lightness: -25%
+				);
+			}
+
+			@for $i from 2 through 3 {
+				&:#{nth($interactive-state, $i)} {
+					@include search-bar-input-interactive-state(
+						$color
+					);
+				}
+			}
+
+			.active-option {
+				background-color: scale-color(
+					$color,
+					$lightness: -30%
+				);
+			}
+		}
+	}
+}
+
+.combobox {
+	position: relative;
+	width: 100%;
+	height: $combobox-height;
+	overflow: hidden;
+
+	display: flex;
+
+	justify-content: space-evenly;
+	align-items: center;
+
+	background-color: transparent;
+
+	z-index: 2;
+
+	&__search-bar-input-hint {
+		position: absolute;
+		top: 1.55rem;
+		left: $combobox-padding-x;
+
+		color: $text-primary;
+
+		font-size: $main-text-font-size;
+
+		z-index: -1;
+	}
+}
+
+.option-list {
+	max-width: $combobox-max-width;
+	max-height: 22.5rem;
+	padding: calc(1rem - map-get($option-list-item-padding, x))
+		calc(
+			$combobox-padding-x -
+				map-get($option-list-item-padding, y)
+		);
+	overflow: hidden;
+
+	display: grid;
+	grid-template-columns: repeat(auto-fit, 13rem);
+
+	gap: $combobox-padding;
+
+	background-color: transparent;
+
+	z-index: 2;
+
+	&__item {
+		padding: map-get($option-list-item-padding, x)
+			map-get($option-list-item-padding, y);
+
+		font-size: $main-text-font-size;
+
+		color: $text-primary;
+		cursor: default;
+
+		&:hover {
+			background-color: scale-color(
+				$bg-primary,
+				$lightness: -30%
+			);
+		}
+	}
+}
+
+.active-option {
+	background-color: scale-color($bg-primary, $lightness: -30%);
+}
+
+.hidden-content {
+	display: none;
+}

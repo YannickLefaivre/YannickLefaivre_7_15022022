@@ -1,0 +1,124 @@
+.navbar {
+    width: 100%;
+    height: auto;
+
+    margin-top: 2.625rem;
+    margin-bottom: 1.0625rem;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    @include from-large-mobile-and-less {
+        margin: 1rem 0 0.5rem;
+    }
+}
+
+.navbar-brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: 16.75rem;
+        height: 5.8125rem;
+
+        @include from-large-mobile-and-less {
+            width: 8.375rem;
+            height: 2.90625rem;
+        }
+    }
+}
+
+.search-bar-form {
+    position: relative;
+    width: 100%;
+
+    @include from-large-mobile-and-less {
+        width: 85%;
+    }
+}
+
+.keywords-row {
+    width: 85%;
+    height: 0;
+
+    &--keywords-active {
+        height: auto;
+        margin-bottom: 0.9375rem;
+    }
+
+    &--dropdown-open {
+        .filters-wrapper {
+            margin-bottom: $row-gutter;
+        }
+    }
+}
+
+.filters-wrapper {
+    position: relative;
+    margin-bottom: $filters-wrapper-row-gutter;
+    width: 100%;
+
+    @include from-large-mobile-and-less {
+        margin-bottom: $row-gutter;
+        
+        width: 85%;
+    }
+}
+
+.filter {
+    width: 100%;
+    height: $combobox-height;
+    display: flex;
+
+    flex-flow: row wrap;
+
+    align-items: flex-start;
+    gap: 1rem;
+
+    @include from-extra-large-mobile-and-less {
+        height: auto;
+        
+        justify-content: center;
+    }
+
+    &--dropdown-open {
+        @include from-extra-large-mobile-and-less {
+            width: 80%;
+            
+            .combobox-wrapper--dropdown-open {
+                width: 100%;
+            }
+        }
+    }
+}
+
+.recipes-card-grid {
+    width: 100%;
+    height: auto;
+    margin-bottom: 2rem;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3.125rem;
+
+    @include from-computer-and-less {
+        grid-template-columns: repeat(auto-fit,23.75rem);
+        justify-content: space-between;
+    }
+
+    @include from-tablette-and-less {
+        justify-content: center;
+    }
+
+    @include from-large-mobile-and-less {
+        width: 85%;
+
+        grid-template-columns: auto;
+    }
+
+    @include from-small-mobile-and-less {
+        grid-template-columns: 14.8rem;
+    }
+}

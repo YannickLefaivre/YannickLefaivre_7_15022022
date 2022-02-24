@@ -1,0 +1,24 @@
+/* Breakpoints */
+
+$breakpoints: (
+    xs-mobile: 280px,
+    sm-mobile: 320px,
+    md-mobile: 375px,
+    lg-mobile: 480px,
+    xl-mobile: 650px, 
+    tablette: 992px,
+    computer: 1240px,
+    large-screen: 1440px
+);
+
+// Font family
+
+$lpp-font-family: (lato: "Lato", roboto:"Roboto", sans-serif: sans-serif);
+
+// Colors
+
+$alt-filters-background-color: (bg-appliance: $bg-secondary, bg-ustensils: $bg-tertiary);
+
+// Padding
+
+$option-list-item-padding: (x: 0.3rem, y: 0.3rem);

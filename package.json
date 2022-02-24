@@ -1,0 +1,28 @@
+{
+  "name": "yannicklefaivre_7_15022022",
+  "version": "1.0.0",
+  "description": "Project 7 of Openclassrooms Front end developper Path",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YannickLefaivre/YannickLefaivre_7_15022022.git"
+  },
+  "keywords": [
+    "javascript",
+    "css",
+    "html",
+    "scss",
+    "vanillaJS",
+    "search-engine",
+    "optimization"
+  ],
+  "author": "YL",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/YannickLefaivre/YannickLefaivre_7_15022022/issues"
+  },
+  "homepage": "https://github.com/YannickLefaivre/YannickLefaivre_7_15022022#readme"
+}

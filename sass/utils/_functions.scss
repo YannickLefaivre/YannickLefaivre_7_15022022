@@ -1,0 +1,5 @@
+@function convertPxToRem($number, $root-font-size) {
+    $convertedValue: $number / $root-font-size;
+
+    @return #{$convertedValue + rem};
+}

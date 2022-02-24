@@ -1,0 +1,32 @@
+* {
+    font-family: map-keys($lpp-font-family);
+    
+    font-weight: normal;
+}
+
+h1 {
+    @include lg-font-size();
+}
+
+h2 {
+    @include lg-font-size();
+}
+
+input {
+    @include lg-font-size();
+}
+
+p {
+    font-family: map-get($lpp-font-family, roboto), map-get($lpp-font-family, sans-serif);
+
+    font-size: $recipe-card-infos-font-size;
+}
+
+button {
+    font-family: map-keys($lpp-font-family);
+}
+
+.ingredient {
+    font-family: map-keys($lpp-font-family);
+}
+

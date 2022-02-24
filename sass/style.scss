@@ -1,0 +1,21 @@
+// lpp abbreviation in the SCSS partial stand for Les Petits Plats
+
+@import "./utils/variables";
+@import "./utils/lists";
+@import "./utils/maps";
+@import "./utils/functions";
+@import "./utils/mixins";
+
+@import "./vendors/normalize";
+
+@import "./base/base";
+@import "./base/typography";
+
+@import "./components/lpp-icons";
+@import "./components/button";
+@import "./components/search-bar";
+@import "./components/keyword";
+@import "./components/combobox";
+@import "./components/card";
+
+@import "./pages/index";
