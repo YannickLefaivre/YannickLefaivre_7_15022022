@@ -13,7 +13,7 @@ export default class Textbox {
 	}
 
 	resetTextbox() {
-		this.inputHint.classList.add("hidden-content");
+		this.inputHint.classList.remove("hidden-content");
 
 		this.element.removeAttribute("placeholder");
 

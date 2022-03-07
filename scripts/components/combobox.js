@@ -28,7 +28,7 @@ export default class Combobox {
 
 		this.listbox = new Listbox(
 			this.element,
-			this.element.querySelector(".btn"),
+			this.element.querySelector(".btn--combobox"),
 			this.element.querySelector(".option-list"),
 			listboxOptions,
 			this.element.querySelector(".combobox"),
@@ -88,7 +88,7 @@ export default class Combobox {
 				if (!this.listbox.isOpen) {
 					this.textbox.changeInputHintDisplay();
 
-					this.listbox.open();
+					this.listbox.onKeydown(event);
 				} else {
 					this.listbox.moveFocusTo("next");
 				}
@@ -160,18 +160,18 @@ export default class Combobox {
 			return;
 		}
 
-		if (event.currentTarget === document && this.listbox.isOpen) {
-			this.listbox.close();
+		if (event.currentTarget === document) {
+			this.listbox.onClick(event);
 
 			this.textbox.resetTextbox();
 		} else if (event.currentTarget !== document) {
 			if (!this.listbox.isOpen) {
 				this.textbox.changeInputHintDisplay();
 
-				this.listbox.open();
+				this.listbox.onClick(event);
 			} else {
 				if (event.currentTarget !== this.textbox.element) {
-					this.listbox.close(event);
+					this.listbox.onClick(event);
 				}
 
 				if (event.currentTarget === this.listbox.trigger) {

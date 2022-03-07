@@ -1,6 +1,6 @@
 import Factory from "../factories/factory.js";
 
-import Combobox from "../components/Combobox.js";
+import Combobox from "../components/combobox.js";
 
 async function getRecipes() {
 	const response = await fetch("./api/recipes.json");
@@ -64,7 +64,7 @@ function getFiltersOptionsLabel(data) {
 
 	/* Removes duplicate from the array of labels of each filter */
 	var filtersOptionLabel = {
-		ingredientOptionLabel: [...new Set(ingredientOptionsLabel)],
+		ingredientOptionsLabel: [...new Set(ingredientOptionsLabel)],
 		applianceOptionsLabel: [...new Set(applianceOptionsLabel)],
 		ustensilOptionsLabel: [...new Set(ustensilOptionsLabel)],
 	};
@@ -80,10 +80,10 @@ async function init() {
 	const filtersForm = [
 		new Combobox(
 			"filterIngredients",
-			filtersOptionLabel.ingredientOptionLabel
+			filtersOptionLabel.ingredientOptionsLabel
 		),
 		new Combobox(
-			"filterappliances",
+			"filterAppliances",
 			filtersOptionLabel.applianceOptionsLabel
 		),
 		new Combobox(

@@ -15,8 +15,8 @@ export default class listbox {
 		trigger,
 		element,
 		options,
-		ariaExpandedStateManager = trigger,
-		ariaControler = trigger
+		ariaExpandedStateManager,
+		ariaControler
 	) {
 		this.isAlreadyInstantiate = true;
 
@@ -81,11 +81,6 @@ export default class listbox {
 	}
 
 	unregisteredEvent() {
-		this.element.removeEventListener(
-			"keydown",
-			this.onKeydown.bind(this)
-		);
-
 		document.removeEventListener(
 			"keydown",
 			this.preventWindowScroll
@@ -193,7 +188,7 @@ export default class listbox {
 			clickEvent.stopPropagation();
 
 			this.open();
-			
+
 			this.ariaControler.changeInputHintDisplay();
 		} else {
 			this.preventMultipleCallToCloseFunction(clickEvent);
@@ -209,7 +204,9 @@ export default class listbox {
 
 		this.keywordList.classList.add("keywords-dropdown-open");
 
-		this.getTriggerIconClassList().add("btn--combobox__icon--dropdown-open");
+		this.getTriggerIconClassList().add(
+			"btn--combobox__icon--dropdown-open"
+		);
 
 		this.container.classList.add(
 			"combobox-wrapper--dropdown-open"
@@ -221,9 +218,15 @@ export default class listbox {
 
 		this.ariaControler.element.focus();
 
-		this.ariaExpandedStateManager.setAttribute("aria-expanded", "true");
+		this.ariaExpandedStateManager.setAttribute(
+			"aria-expanded",
+			"true"
+		);
 
-		this.ariaControler.element.setAttribute("aria-activedescendant", `${this.options[this.activeDescendant].id}`);
+		this.ariaControler.element.setAttribute(
+			"aria-activedescendant",
+			`${this.options[this.activeDescendant].id}`
+		);
 
 		this.options[this.activeDescendant].classList.add(
 			"active-option"
@@ -237,7 +240,9 @@ export default class listbox {
 
 		this.keywordList.classList.remove("keyword-dropdown-open");
 
-		this.getTriggerIconClassList().remove("btn--combobox__icon--dropdown-open");
+		this.getTriggerIconClassList().remove(
+			"btn--combobox__icon--dropdown-open"
+		);
 
 		this.container.classList.remove(
 			"combobox-wrapper--dropdown-open"
@@ -247,7 +252,10 @@ export default class listbox {
 			"filter--dropdown-open"
 		);
 
-		this.ariaExpandedStateManager.setAttribute("aria-expanded", "false");
+		this.ariaExpandedStateManager.setAttribute(
+			"aria-expanded",
+			"false"
+		);
 
 		this.unregisteredEvent();
 
@@ -324,58 +332,7 @@ export default class listbox {
 
 		return 0;
 	}
-
-	static sortByPopularity(media) {
-		media.sort((previousMedia, nextMedia) => {
-			return SelectMenu.descendingSort(
-				previousMedia.likes,
-				nextMedia.likes
-			);
-		});
-	}
-
-	static sortByDate(media) {
-		media.sort((previousMedia, nextMedia) => {
-			return SelectMenu.descendingSort(
-				previousMedia.date,
-				nextMedia.date
-			);
-		});
-	}
-
-	static sortByTitle(media) {
-		media.sort((previousMedia, nextMedia) => {
-			return SelectMenu.ascendingSort(
-				previousMedia.title,
-				nextMedia.title
-			);
-		});
-	}
-
-	updatePhotographerGallery(currentPhotographer) {
-		const photographerGallery = document.querySelector(
-			".photographer-gallery"
-		);
-		const photographerGalleryHeading = document.getElementById(
-			"photographer-gallery-heading"
-		);
-
-		photographerGallery.innerHTML = "";
-
-		photographerGallery.appendChild(photographerGalleryHeading);
-
-		currentPhotographer.media.forEach((media) => {
-			const mediaCardDOM =
-				currentPhotographer.getMediaCardDOM(media);
-
-			photographerGallery.innerHTML += mediaCardDOM;
-		});
-
-		Lightbox.init();
-
-		LikeButton.init(currentPhotographer);
-	}
-
+	
 	/**
 	 * Move the visible focus in the direction of the next or previous option.
 	 *
@@ -445,18 +402,23 @@ export default class listbox {
 
 		this.ariaControler.resetTextbox();
 
-		const inputHint = this.ariaControler.inputHint.innerText.toLowerCase();
+		const inputHint =
+			this.ariaControler.inputHint.innerText.toLowerCase();
 
 		const filterType = Normalize.string(inputHint);
 
-		const keywordName = Normalize.string(selectedOption.innerText);
+		const keywordName = Normalize.string(
+			selectedOption.innerText
+		);
 
-		const keyword = new Keyword(`${keywordName}`, `${filterType}`);
+		const keyword = new Keyword(
+			`${keywordName}`,
+			`${filterType}`
+		);
 
 		keyword.render();
 
 		keyword.listenDismissRequest();
-
 	}
 
 	/**
@@ -477,6 +439,7 @@ export default class listbox {
 	}
 
 	getTriggerIconClassList() {
-		return this.trigger.querySelector(".btn--combobox__icon").classList;
+		return this.trigger.querySelector(".btn--combobox__icon")
+			.classList;
 	}
 }
