@@ -39,17 +39,14 @@ export default class Combobox {
 	}
 
 	initEventManagement() {
-		document.addEventListener("click", this.onClick.bind(this));
+		document.addEventListener("click", () => {
 
-		this.element.addEventListener("focus", () => {
-			this.textbox.element.focus();
+			if(this.listbox.isOpen) {
+				this.onClick.bind(this);
+			}
+
 		});
-
-		this.textbox.element.addEventListener(
-			"keydown",
-			this.onKeydown.bind(this)
-		);
-
+		
 		this.textbox.element.addEventListener(
 			"click",
 			this.onClick.bind(this)
@@ -61,55 +58,6 @@ export default class Combobox {
 		);
 
 		this.listbox.registerEventListener();
-	}
-
-	/**
-	 *
-	 * @param {KeyboardEvent} event
-	 */
-	onKeydown(event) {
-		if (event.defaultPrevented) {
-			return;
-		}
-
-		switch (event.key) {
-			case "ArrowUp":
-				event.preventDefault();
-
-				if (this.listbox.isOpen) {
-					this.listbox.moveFocusTo("previous");
-				}
-
-				break;
-
-			case "ArrowDown":
-				event.preventDefault();
-
-				if (!this.listbox.isOpen) {
-					this.textbox.changeInputHintDisplay();
-
-					this.listbox.onKeydown(event);
-				} else {
-					this.listbox.moveFocusTo("next");
-				}
-
-				break;
-
-			case "Escape":
-				event.preventDefault();
-
-				if (this.listbox.isOpen) {
-					this.listbox.close();
-
-					this.textbox.clearData();
-
-					this.textbox.resetTextbox();
-				}
-
-				break;
-			default:
-				return;
-		}
 	}
 
 	/**

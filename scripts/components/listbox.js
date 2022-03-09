@@ -55,16 +55,6 @@ export default class listbox {
 			this.onClick.bind(this)
 		);
 
-		this.trigger.addEventListener(
-			"keydown",
-			this.onKeydown.bind(this)
-		);
-
-		this.element.addEventListener(
-			"keydown",
-			this.onKeydown.bind(this)
-		);
-
 		this.options.forEach((option) => {
 			option.addEventListener(
 				"click",
@@ -72,106 +62,7 @@ export default class listbox {
 			);
 		});
 
-		document.addEventListener(
-			"keydown",
-			this.preventWindowScroll.bind(this)
-		);
-
-		document.addEventListener("click", this.close.bind(this));
-	}
-
-	unregisteredEvent() {
-		document.removeEventListener(
-			"keydown",
-			this.preventWindowScroll
-		);
-	}
-
-	/**
-	 *
-	 * @param {KeyboardEvent} keyboardEvent KeyboardEvent object passed by the "click" event
-	 */
-	onKeydown(keyboardEvent) {
-		if (keyboardEvent.defaultPrevented) {
-			return;
-		}
-
-		switch (keyboardEvent.key) {
-			case "Enter":
-				if (keyboardEvent.currentTarget === this.trigger) {
-					if (!clickEvent.defaultPrevented) {
-						clickEvent.preventDefault();
-					}
-
-					clickEvent.stopPropagation();
-
-					if (!this.isAlreadyInstantiate) {
-						new SelectMenu(this.currentPhotographer);
-					} else {
-						this.open(keyboardEvent);
-					}
-				}
-
-				break;
-
-			case " ":
-				this.preventMultipleCallToCloseFunction(
-					keyboardEvent
-				);
-
-				this.selectOption(
-					keyboardEvent,
-					this.currentPhotographer
-				);
-
-				this.ariaControler.element.focus();
-
-				break;
-
-			case "Escape":
-				this.preventMultipleCallToCloseFunction(
-					keyboardEvent
-				);
-
-				this.close(keyboardEvent);
-
-				this.ariaControler.element.focus();
-
-				break;
-
-			case "ArrowUp":
-				this.moveFocusTo("previous");
-
-				break;
-
-			case "ArrowDown":
-				this.moveFocusTo("next");
-
-				break;
-
-			case "Tab":
-				this.preventMultipleCallToCloseFunction();
-
-				this.close(keyboardEvent);
-
-				this.trigger.focus();
-
-				return;
-
-			case "CapsLock":
-				this.typeAhead(keyboardEvent.key);
-
-				break;
-
-			default:
-				this.ariaControler.element.focus();
-
-				break;
-		}
-
-		if (keyboardEvent.currentTarget !== this.trigger) {
-			keyboardEvent.preventDefault();
-		}
+		document.addEventListener("click", this.onClick.bind(this));
 	}
 
 	/**
@@ -180,7 +71,10 @@ export default class listbox {
 	 * @param {MouseEvent} clickEvent MouseEvent object passed by the "click" event
 	 */
 	onClick(clickEvent) {
-		if (this.element.classList.contains("hidden-content")) {
+		if (
+			!this.isOpen && (clickEvent.currentTarget !== document ||
+			clickEvent.currentTarget === this.trigger)
+		) {
 			if (!clickEvent.defaultPrevented) {
 				clickEvent.preventDefault();
 			}
@@ -190,7 +84,10 @@ export default class listbox {
 			this.open();
 
 			this.ariaControler.changeInputHintDisplay();
-		} else {
+		} else if (
+			clickEvent.currentTarget === this.trigger ||
+			clickEvent.currentTarget === document
+		) {
 			this.preventMultipleCallToCloseFunction(clickEvent);
 
 			this.close();
@@ -257,110 +154,7 @@ export default class listbox {
 			"false"
 		);
 
-		this.unregisteredEvent();
-
 		this.isOpen = false;
-	}
-
-	preventWindowScroll(event) {
-		if (document.activeElement === this.element) {
-			if (
-				event.key === "ArrowUp" ||
-				event.key === "ArrowDown"
-			) {
-				event.preventDefault();
-			}
-		}
-	}
-
-	removeFocusIndicatorOfOption() {
-		this.options.forEach((option) => {
-			if (option.classList.contains("active-option")) {
-				option.classList.remove("active-option");
-			}
-		});
-	}
-
-	sortMediaCards(currentPhotographer, media, sortBy) {
-		switch (sortBy) {
-			case "popularity":
-				SelectMenu.sortByPopularity(media);
-
-				this.updatePhotographerGallery(currentPhotographer);
-
-				break;
-
-			case "title":
-				SelectMenu.sortByTitle(media);
-
-				this.updatePhotographerGallery(currentPhotographer);
-
-				break;
-
-			case "date":
-				SelectMenu.sortByDate(media);
-
-				this.updatePhotographerGallery(currentPhotographer);
-
-				break;
-
-			default:
-				return;
-		}
-	}
-
-	static ascendingSort(a, b) {
-		if (a > b) {
-			return 1;
-		}
-
-		if (a < b) {
-			return -1;
-		}
-
-		return 0;
-	}
-
-	static descendingSort(a, b) {
-		if (a > b) {
-			return -1;
-		}
-
-		if (a < b) {
-			return 1;
-		}
-
-		return 0;
-	}
-	
-	/**
-	 * Move the visible focus in the direction of the next or previous option.
-	 *
-	 * @param {String} elementDirection can be set to "next" or "previous"
-	 */
-	moveFocusTo(elementDirection) {
-		if (this.isOpen) {
-			this.removeFocusIndicatorOfOption();
-
-			if (elementDirection === "next") {
-				if (this.activeDescendant < this.options.length - 1) {
-					this.activeDescendant++;
-				}
-			} else if (elementDirection === "previous") {
-				if (this.activeDescendant > 0) {
-					this.activeDescendant--;
-				}
-			}
-
-			this.ariaControler.element.setAttribute(
-				"aria-activedescendant",
-				`${this.options[this.activeDescendant].id}`
-			);
-
-			this.options[this.activeDescendant].classList.add(
-				"active-option"
-			);
-		}
 	}
 
 	selectOption(event) {
