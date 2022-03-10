@@ -1,9 +1,13 @@
+import Factory from "../factories/factory.js";
+import SearchEngine from "../utils/searchEngine.js";
+
 export default class Keyword {
 	/**
 	 * @param {String} keywordName
 	 */
-	constructor(keywordName, filterType) {
+	constructor(keywordName, filterType, associatedCombobox) {
 		this.container = document.querySelector(".keywords-list");
+		this.associatedCombobox = associatedCombobox;
 		this.dom = this.buildDOM(keywordName, filterType);
 	}
 
@@ -14,10 +18,7 @@ export default class Keyword {
 
 		switch (filterType) {
 			case "ingredients":
-				keywordType = filterType.slice(
-					0,
-					filterType.length - 1
-				);
+				keywordType = filterType.slice(0, filterType.length - 1);
 
 				break;
 			case "appareils":
@@ -84,6 +85,37 @@ export default class Keyword {
 
 	dismiss() {
 		this.container.removeChild(this.dom);
+
+		document.querySelector(".recipes-card-grid").innerHTML = "";
+
+		const keywordLabelList =
+			document.querySelectorAll(".btn--close__label");
+
+		var recipeList = [];
+
+		if (keywordLabelList.length !== 0) {
+			recipeList = [];
+
+			keywordLabelList.forEach((keywordLabel) => {
+				recipeList = SearchEngine.searchRecipesByTag(
+					keywordLabel.innerText,
+					true
+				);
+			});
+
+			this.associatedCombobox.listbox.update(recipeList);
+		} else {
+			recipeList = SearchEngine.initialRecipeList;
+			SearchEngine.updatedRecipeList.length = 0;
+
+			this.associatedCombobox.listbox.update(recipeList);
+		}
+
+		recipeList.forEach((recipe) => {
+			const recipeCard = Factory.buildRecipeCard(recipe);
+
+			recipeCard.render();
+		});
 	}
 
 	listenDismissRequest() {

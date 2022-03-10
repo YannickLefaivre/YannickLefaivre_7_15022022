@@ -1,20 +1,23 @@
 export default class Factory {
+	/**
+	 *
+	 * @param {Recipe} data
+	 * @returns {Recipe}
+	 */
+	static buildRecipeCard(data) {
+		const { id, name, ingredients, time, description } = data;
 
-    /**
-     * 
-     * @param {Recipe} data
-     * @returns {Recipe}
-     */
-     static buildRecipeCard(data) {
-        const { id, name, ingredients, time, description } = data;
+		const container = document.querySelector(
+			".recipes-card-grid"
+		);
 
-        const container = document.querySelector(".recipes-card-grid");
+		const element = document.createElement("ARTICLE");
 
-        const element = document.createElement("ARTICLE");
+		element.classList.add("recipe-card");
 
-        element.classList.add("recipe-card");
+        element.setAttribute("id", `${id}`);
 
-        element.innerHTML = `<div class="recipe-card__image"></div>
+		element.innerHTML = `<div class="recipe-card__image"></div>
 
         <div class="recipe-card-body">
             <div class="recipe-card-infos">
@@ -50,64 +53,42 @@ export default class Factory {
                 </ul>
 
                 <p class="recipe-card-infos__description">
-                ${description}
+                    ${description}
                 </p>
             </div>
         </div>`;
 
-        const ingredientsListContainer = element.querySelector(".recipe-card-infos__ingredients");
-        
-        var ingredientsList = "";
-        var mesureament = ""
+		const ingredientsListContainer = element.querySelector(
+			".recipe-card-infos__ingredients"
+		);
 
-        for (let index = 0; index < ingredients.length; index++) {
+		var ingredientsList = "";
+		var mesureament = "";
 
-            var ingredientName = `<li class="ingredient"> <span class="highlight">${ingredients[index].ingredient}:</span> `;
+		for (let index = 0; index < ingredients.length; index++) {
+			var ingredientName = `<li class="ingredient"> <span class="highlight">${ingredients[index].ingredient}:</span> `;
 
-            if (ingredients[index].hasOwnProperty("quantity") ) {
+			if (ingredients[index].hasOwnProperty("quantity")) {
+				mesureament = `${ingredients[index].quantity} `;
 
-                mesureament = `${ingredients[index].quantity} `;
+				if (ingredients[index].hasOwnProperty("unit")) {
+					mesureament += `${ingredients[index].unit}</li>`;
+				}
+			}
 
-                if (ingredients[index].hasOwnProperty("unit")) {
+			ingredientsList += ingredientName.concat(mesureament);
+		}
 
-                    mesureament += `${ingredients[index].unit}</li>`;
+		ingredientsListContainer.innerHTML += ingredientsList;
 
-                }
-                
-            }
-            
-            ingredientsList += ingredientName.concat(mesureament);
+		function render(update = false) {
+			if (update) {
+				container.innerHTML = "";
+			}
 
-        }
+			container.appendChild(element);
+		}
 
-        ingredientsListContainer.innerHTML += ingredientsList;
-
-        function display() {
-            container.appendChild(element);
-        }
-
-        function hide() {
-            element.classList.add("hidden-content");
-        }
-
-        return { element, container, id, display, hide };
-    }
-
-    /**
-     * 
-     * @param {String} label 
-     * @param {Boolean} selectedState
-     */
-    static buildListboxOption(label, selectedState) {
-
-        var lowerCaseLabel = label.toLowerCase();
-
-        var id = lowerCaseLabel.replace(/[\s\(\)\d\.]+/ig, "-");
-
-        const optionsDOM = `<li id="${id}" class="option-list__item" role="option" aria-selected="${selectedState}">
-            ${label}
-        </li>`;
-
-        return optionsDOM;
-    }
+		return { render };
+	}
 }

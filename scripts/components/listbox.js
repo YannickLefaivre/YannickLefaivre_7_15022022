@@ -1,7 +1,9 @@
 import Keyword from "./keyword.js";
 import Normalize from "../utils/normalize.js";
+import SearchEngine from "../utils/searchEngine.js";
+import Factory from "../factories/factory.js";
 
-export default class listbox {
+export default class Listbox {
 	/**
 	 * @param {HTMLDivElement | Element} container
 	 * @param {HTMLButtonElement | Element} trigger
@@ -11,7 +13,7 @@ export default class listbox {
 	 * @param {Textbox} ariaControler
 	 */
 	constructor(
-		container,
+		ownedCombobox,
 		trigger,
 		element,
 		options,
@@ -24,7 +26,9 @@ export default class listbox {
 
 		this.ariaControler = ariaControler;
 
-		this.container = container;
+		this.ownedCombobox = ownedCombobox;
+
+		this.container = ownedCombobox.element;
 
 		this.trigger = trigger;
 
@@ -32,17 +36,35 @@ export default class listbox {
 
 		this.element = element;
 
-		options.forEach(
-			(option) => (this.element.innerHTML += option)
-		);
+		this.options = this.createOptionsDOM(options);
 
-		this.options = this.element.querySelectorAll(
-			".option-list__item"
-		);
+		this.options.forEach((option) => (this.element.innerHTML += option));
 
-		this.activeDescendant = 0;
+		this.options = this.element.querySelectorAll(".option-list__item");
+
+		this.selectedOption = "";
 
 		this.isOpen = false;
+	}
+
+	/**
+	 *
+	 * @param {[]} optionsLabel
+	 */
+	createOptionsDOM(optionsLabel) {
+		var allOptionDOM = [];
+
+		optionsLabel.forEach((optionLabel) => {
+			var lowerCaseLabel = optionLabel.toLowerCase();
+
+			var id = lowerCaseLabel.replace(/[\s\(\)\d\.]+/gi, "-");
+
+			const optionDOM = `<li id="${id}" class="option-list__item">${optionLabel}</li>`;
+
+			allOptionDOM.push(optionDOM);
+		});
+
+		return allOptionDOM;
 	}
 
 	registerEventListener() {
@@ -50,16 +72,10 @@ export default class listbox {
 			clickEvent.stopPropagation();
 		});
 
-		this.trigger.addEventListener(
-			"click",
-			this.onClick.bind(this)
-		);
+		this.trigger.addEventListener("click", this.onClick.bind(this));
 
 		this.options.forEach((option) => {
-			option.addEventListener(
-				"click",
-				this.selectOption.bind(this)
-			);
+			option.addEventListener("click", this.selectOption.bind(this));
 		});
 
 		document.addEventListener("click", this.onClick.bind(this));
@@ -72,8 +88,9 @@ export default class listbox {
 	 */
 	onClick(clickEvent) {
 		if (
-			!this.isOpen && (clickEvent.currentTarget !== document ||
-			clickEvent.currentTarget === this.trigger)
+			!this.isOpen &&
+			(clickEvent.currentTarget !== document ||
+				clickEvent.currentTarget === this.trigger)
 		) {
 			if (!clickEvent.defaultPrevented) {
 				clickEvent.preventDefault();
@@ -105,29 +122,13 @@ export default class listbox {
 			"btn--combobox__icon--dropdown-open"
 		);
 
-		this.container.classList.add(
-			"combobox-wrapper--dropdown-open"
-		);
+		this.container.classList.add("combobox-wrapper--dropdown-open");
 
-		this.container.parentElement.classList.add(
-			"filter--dropdown-open"
-		);
+		this.container.parentElement.classList.add("filter--dropdown-open");
 
 		this.ariaControler.element.focus();
 
-		this.ariaExpandedStateManager.setAttribute(
-			"aria-expanded",
-			"true"
-		);
-
-		this.ariaControler.element.setAttribute(
-			"aria-activedescendant",
-			`${this.options[this.activeDescendant].id}`
-		);
-
-		this.options[this.activeDescendant].classList.add(
-			"active-option"
-		);
+		this.ariaExpandedStateManager.setAttribute("aria-expanded", "true");
 
 		this.isOpen = true;
 	}
@@ -141,54 +142,19 @@ export default class listbox {
 			"btn--combobox__icon--dropdown-open"
 		);
 
-		this.container.classList.remove(
-			"combobox-wrapper--dropdown-open"
-		);
+		this.container.classList.remove("combobox-wrapper--dropdown-open");
 
-		this.container.parentElement.classList.remove(
-			"filter--dropdown-open"
-		);
+		this.container.parentElement.classList.remove("filter--dropdown-open");
 
-		this.ariaExpandedStateManager.setAttribute(
-			"aria-expanded",
-			"false"
-		);
+		this.ariaExpandedStateManager.setAttribute("aria-expanded", "false");
 
 		this.isOpen = false;
 	}
 
-	selectOption(event) {
+	async selectOption(event) {
 		event.stopPropagation();
 
-		var selectedOption = HTMLLIElement;
-
-		var optionsList = Array.prototype.slice.call(this.options);
-
-		if (event.currentTarget === this.element) {
-			selectedOption =
-				event.currentTarget.querySelector(".active-option");
-		} else {
-			selectedOption = event.currentTarget;
-		}
-
-		optionsList.forEach((option) => {
-			option.setAttribute("aria-selected", "false");
-
-			option.classList.remove("active-option");
-		});
-
-		this.activeDescendant = optionsList.indexOf(selectedOption);
-
-		this.ariaControler.element.setAttribute(
-			"aria-activedescendant",
-			selectedOption.id
-		);
-
-		selectedOption.setAttribute("aria-selected", `true`);
-
-		selectedOption.classList.add("active-option");
-
-		/* this.sortMediaCards(this.currentPhotographer, this.currentPhotographer.media, selectedOption.id); */
+		this.selectedOption = event.currentTarget.innerText;
 
 		this.preventMultipleCallToCloseFunction(event);
 
@@ -196,23 +162,64 @@ export default class listbox {
 
 		this.ariaControler.resetTextbox();
 
-		const inputHint =
-			this.ariaControler.inputHint.innerText.toLowerCase();
+		const inputHint = this.ariaControler.inputHint.innerText.toLowerCase();
 
 		const filterType = Normalize.string(inputHint);
 
-		const keywordName = Normalize.string(
-			selectedOption.innerText
-		);
-
 		const keyword = new Keyword(
-			`${keywordName}`,
-			`${filterType}`
+			`${this.selectedOption.toLowerCase()}`,
+			`${filterType}`,
+			this.ownedCombobox
 		);
 
 		keyword.render();
 
 		keyword.listenDismissRequest();
+
+		const updatedRecipesList = SearchEngine.searchRecipesByTag(
+			this.selectedOption,
+			false
+		);
+		debugger;
+
+		this.update(updatedRecipesList);
+
+		document.querySelector(".recipes-card-grid").innerHTML = "";
+
+		updatedRecipesList.forEach((recipe) => {
+			const recipeCard = Factory.buildRecipeCard(recipe);
+
+			recipeCard.render();
+		});
+	}
+
+	update(recipeList) {
+		const filtersOptionLabel =
+			Normalize.parseFiltersOptionLabel(recipeList);
+
+		this.element.innerHTML = "";
+
+		switch (this.container.id) {
+			case "filterIngredients":
+				this.createOptionsDOM(
+					filtersOptionLabel.ingredientOptionsLabel
+				);
+
+				break;
+
+			case "filterAppliances":
+				this.createOptionsDOM(filtersOptionLabel.applianceOptionsLabel);
+
+				return true;
+
+			case "filterUstensils":
+				this.createOptionsDOM(filtersOptionLabel.ustensilOptionsLabel);
+
+				return true;
+
+			default:
+				return false;
+		}
 	}
 
 	/**
@@ -221,19 +228,15 @@ export default class listbox {
 	 */
 	preventMultipleCallToCloseFunction(event) {
 		if (
-			[
-				this.element,
-				this.options,
-				this.trigger,
-				this.container,
-			].includes(event.target)
+			[this.element, this.options, this.trigger, this.container].includes(
+				event.target
+			)
 		) {
 			event.stopPropagation();
 		}
 	}
 
 	getTriggerIconClassList() {
-		return this.trigger.querySelector(".btn--combobox__icon")
-			.classList;
+		return this.trigger.querySelector(".btn--combobox__icon").classList;
 	}
 }

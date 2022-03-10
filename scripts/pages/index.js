@@ -1,6 +1,8 @@
-import Factory from "../factories/factory.js";
-
 import Combobox from "../components/combobox.js";
+import Recipe from "../components/recipe.js";
+import Factory from "../factories/factory.js";
+import Normalize from "../utils/normalize.js";
+import SearchEngine from "../utils/searchEngine.js";
 
 async function getRecipes() {
 	const response = await fetch("./api/recipes.json");
@@ -17,65 +19,12 @@ async function getRecipes() {
 	return recipes;
 }
 
-/**
- * Transform the first letter of the *string* to upper case
- * @param {String} string
- */
-function firstLetterToUpperCase(string) {
-	return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function getFiltersOptionsLabel(data) {
-	var ingredientOptionsLabel = [];
-	var applianceOptionsLabel = [];
-	var ustensilOptionsLabel = [];
-
-	const removesWordBetweenParentheses = (string) =>
-		string.replace(/\s\([^\)]*\)/gi, "");
-
-	data.forEach((data) => {
-		data.ingredients.forEach((ingredients) => {
-			var ingredientOptions = firstLetterToUpperCase(
-				ingredients.ingredient.toLowerCase()
-			);
-
-			ingredientOptionsLabel.push(
-				removesWordBetweenParentheses(ingredientOptions)
-			);
-		});
-
-		var applianceOptions = removesWordBetweenParentheses(
-			data.appliance.toLowerCase()
-		);
-
-		applianceOptionsLabel.push(
-			firstLetterToUpperCase(applianceOptions)
-		);
-
-		data.ustensils.forEach((ustensil) => {
-			var ustensilOption =
-				firstLetterToUpperCase(ustensil.toLowerCase());
-
-			ustensilOptionsLabel.push(
-				removesWordBetweenParentheses(ustensilOption)
-			);
-		});
-	});
-
-	/* Removes duplicate from the array of labels of each filter */
-	var filtersOptionLabel = {
-		ingredientOptionsLabel: [...new Set(ingredientOptionsLabel)],
-		applianceOptionsLabel: [...new Set(applianceOptionsLabel)],
-		ustensilOptionsLabel: [...new Set(ustensilOptionsLabel)],
-	};
-
-	return filtersOptionLabel;
-}
-
 async function init() {
-	const recipes = await getRecipes();
+	const initialRecipeList = await getRecipes();
 
-	const filtersOptionLabel = getFiltersOptionsLabel(recipes);
+	var searchedRecipes = [];
+
+	const filtersOptionLabel = Normalize.parseFiltersOptionLabel(initialRecipeList);
 
 	const filtersForm = [
 		new Combobox(
@@ -96,11 +45,15 @@ async function init() {
 		filter.initEventManagement();
 	});
 
-	recipes.forEach((recipe) => {
-		const recipeCard = Factory.buildRecipeCard(recipe);
+	initialRecipeList.forEach((recipe) => {
+		const recipeModel = Factory.buildRecipeCard(recipe);
 
-		recipeCard.display();
+		recipeModel.render();
 	});
+
+	SearchEngine.init(initialRecipeList, searchedRecipes);
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+export { getRecipes };

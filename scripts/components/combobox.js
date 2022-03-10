@@ -1,6 +1,5 @@
 import Textbox from "./textbox.js";
 import Listbox from "./listbox.js";
-import Factory from "../factories/factory.js";
 
 export default class Combobox {
 	/**
@@ -18,19 +17,11 @@ export default class Combobox {
 			)
 		);
 
-		var listboxOptions = [];
-
-		options.forEach((option) => {
-			listboxOptions.push(
-				Factory.buildListboxOption(option, false)
-			);
-		});
-
 		this.listbox = new Listbox(
-			this.element,
+			this,
 			this.element.querySelector(".btn--combobox"),
 			this.element.querySelector(".option-list"),
-			listboxOptions,
+			options,
 			this.element.querySelector(".combobox"),
 			this.textbox
 		);
