@@ -13,9 +13,7 @@ export default class Combobox {
 
 		this.textbox = new Textbox(
 			this.element.querySelector(".search-bar-input"),
-			this.element.querySelector(
-				".combobox__search-bar-input-hint"
-			)
+			this.element.querySelector(".combobox__search-bar-input-hint")
 		);
 
 		this.listbox = new Listbox(
@@ -32,24 +30,16 @@ export default class Combobox {
 
 	initEventManagement() {
 		document.addEventListener("click", () => {
-
-			if(this.listbox.isOpen) {
+			if (this.listbox.isOpen) {
 				this.onClick.bind(this);
 			}
-
 		});
-		
-		this.textbox.element.addEventListener(
-			"click",
-			this.onClick.bind(this)
-		);
 
-		this.textbox.element.addEventListener(
-			"input",
-			this.onInput.bind(this)
-		);
+		this.textbox.element.addEventListener("click", this.onClick.bind(this));
 
-		this.listbox.registerEventListener();
+		this.textbox.element.addEventListener("input", this.onInput.bind(this));
+
+		this.listbox.registerEventListener(true);
 	}
 
 	/**
@@ -66,9 +56,8 @@ export default class Combobox {
 				option.classList.remove("hidden-content");
 			});
 		} else {
-			const optionList = this.listbox.element.querySelectorAll(
-				".option-list__item"
-			);
+			const optionList =
+				this.listbox.element.querySelectorAll(".option-list__item");
 
 			const comboboxOptions = Array.from(optionList);
 
@@ -76,9 +65,7 @@ export default class Combobox {
 				(option) =>
 					option.innerText
 						.toLowerCase()
-						.search(
-							event.currentTarget.value.toLowerCase()
-						) === -1
+						.search(event.currentTarget.value.toLowerCase()) === -1
 			);
 
 			this.nonMatchedOptions.forEach((option) => {
@@ -120,35 +107,36 @@ export default class Combobox {
 			}
 		}
 	}
-	
+
 	updateAllListbox(recipeList) {
-		if(this.otherCombobox === undefined) {
-			throw ReferenceError("The property which reference other combobox wasn't set during or before the call of the initEventManagement() method.");
+		if (this.otherCombobox === undefined) {
+			throw ReferenceError(
+				"The property which reference other combobox wasn't set during or before the call of the initEventManagement() method."
+			);
 		}
 
 		const filtersOptionLabel =
 			Normalize.parseFiltersOptionLabel(recipeList);
 
 		this.otherCombobox.forEach((combobox) => {
-			debugger
 			combobox.listbox.element.innerHTML = "";
 
 			switch (combobox.element.id) {
 				case "filterIngredients":
-					filtersOptionLabel.ingredientOptionsLabel.forEach(optionLabel => {
-						for (const option of combobox.listbox.options) {
-							if(option.innerText === optionLabel) {
-								Listbox.hideOption();
-							}
-						}
-					})
+					combobox.listbox.options = combobox.listbox.createOptions(
+						filtersOptionLabel.ingredientOptionsLabel
+					);
 
-					break;
+					combobox.listbox.registerEventListener(false);
+
+					return true;
 
 				case "filterAppliances":
 					combobox.listbox.options = combobox.listbox.createOptions(
 						filtersOptionLabel.applianceOptionsLabel
 					);
+
+					combobox.listbox.registerEventListener(false);
 
 					return true;
 
@@ -156,6 +144,8 @@ export default class Combobox {
 					combobox.listbox.options = combobox.listbox.createOptions(
 						filtersOptionLabel.ustensilOptionsLabel
 					);
+
+					combobox.listbox.registerEventListener(false);
 
 					return true;
 

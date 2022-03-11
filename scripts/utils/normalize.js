@@ -19,43 +19,47 @@ export default class Normalize {
 		var ingredientOptionsLabel = [];
 		var applianceOptionsLabel = [];
 		var ustensilOptionsLabel = [];
-	
+
 		const removesWordBetweenParentheses = (string) =>
 			string.replace(/\s\([^\)]*\)/gi, "");
-	
+
 		data.forEach((data) => {
 			data.ingredients.forEach((ingredients) => {
 				var ingredientOptions = Normalize.firstLetterToUpperCase(
 					ingredients.ingredient.toLowerCase()
 				);
-	
+
 				ingredientOptionsLabel.push(
 					removesWordBetweenParentheses(ingredientOptions)
 				);
 			});
-	
+
 			var applianceOptions = removesWordBetweenParentheses(
 				data.appliance.toLowerCase()
 			);
-	
-			applianceOptionsLabel.push(Normalize.firstLetterToUpperCase(applianceOptions));
-	
+
+			applianceOptionsLabel.push(
+				Normalize.firstLetterToUpperCase(applianceOptions)
+			);
+
 			data.ustensils.forEach((ustensil) => {
-				var ustensilOption = Normalize.firstLetterToUpperCase(ustensil.toLowerCase());
-	
+				var ustensilOption = Normalize.firstLetterToUpperCase(
+					ustensil.toLowerCase()
+				);
+
 				ustensilOptionsLabel.push(
 					removesWordBetweenParentheses(ustensilOption)
 				);
 			});
 		});
-	
+		
 		/* Removes duplicate from the array of labels of each filter */
 		var filtersOptionLabel = {
 			ingredientOptionsLabel: [...new Set(ingredientOptionsLabel)],
 			applianceOptionsLabel: [...new Set(applianceOptionsLabel)],
 			ustensilOptionsLabel: [...new Set(ustensilOptionsLabel)],
 		};
-	
+
 		return filtersOptionLabel;
 	}
 }

@@ -16,6 +16,7 @@ export default class Keyword {
 		const dom = document.createElement("LI");
 
 		var keywordType = "";
+		var keywordComboboxId = this.associatedCombobox.element.id;
 
 		switch (filterType) {
 			case "ingredients":
@@ -47,6 +48,8 @@ export default class Keyword {
 		dom.classList.add("keywords-list__item");
 
 		dom.classList.add(`keywords-list__item--bg-${keywordType}`);
+
+		dom.setAttribute("id", `${keywordComboboxId}`);
 
 		dom.innerHTML = `<button
             class="btn btn--close"
@@ -89,30 +92,9 @@ export default class Keyword {
 
 		document.querySelector(".recipes-card-grid").innerHTML = "";
 
-		const keywordLabelList =
-			document.querySelectorAll(".btn--close__label");
+		const updatedRecipeList = SearchEngine.searchRecipesWithMultipleTag(this.associatedCombobox, true);
 
-		var recipeList = [];
-
-		if (keywordLabelList.length !== 0) {
-			recipeList = [];
-
-			keywordLabelList.forEach((keywordLabel) => {
-				recipeList = SearchEngine.searchRecipesByTag(
-					keywordLabel.innerText,
-					true
-				);
-			});
-
-			this.associatedCombobox.updateAllListbox(recipeList);
-		} else {
-			recipeList = SearchEngine.initialRecipeList;
-			SearchEngine.updatedRecipeList.length = 0;
-
-			this.associatedCombobox.updateAllListbox(recipeList);
-		}
-
-		recipeList.forEach((recipe) => {
+		updatedRecipeList.forEach((recipe) => {
 			const recipeCard = Factory.buildRecipeCard(recipe);
 
 			recipeCard.render();

@@ -39,8 +39,6 @@ export default class Listbox {
 
 		this.options = this.createOptions(options);
 
-		this.options = this.element.querySelectorAll(".option-list__item");
-
 		this.selectedOption = "";
 
 		this.isOpen = false;
@@ -61,21 +59,27 @@ export default class Listbox {
 			this.element.innerHTML += optionDOM;
 		});
 
-		return this.element.getElementsByClassName(".option-list__item");
+		return this.element.querySelectorAll(".option-list__item");
 	}
 
-	registerEventListener() {
-		this.container.addEventListener("click", (clickEvent) => {
-			clickEvent.stopPropagation();
-		});
-
-		this.trigger.addEventListener("click", this.onClick.bind(this));
-
-		this.options.forEach((option) => {
-			option.addEventListener("click", this.selectOption.bind(this));
-		});
-
-		document.addEventListener("click", this.onClick.bind(this));
+	registerEventListener(updateOnlyOptionsClickEvent = false) {
+		if(updateOnlyOptionsClickEvent) {
+			this.container.addEventListener("click", (clickEvent) => {
+				clickEvent.stopPropagation();
+			});
+	
+			this.trigger.addEventListener("click", this.onClick.bind(this));
+	
+			this.options.forEach((option) => {
+				option.addEventListener("click", this.selectOption.bind(this));
+			});
+	
+			document.addEventListener("click", this.onClick.bind(this));
+		} else {
+			this.options.forEach((option) => {
+				option.addEventListener("click", this.selectOption.bind(this));
+			});
+		}
 	}
 
 	/**
@@ -173,24 +177,30 @@ export default class Listbox {
 
 		keyword.listenDismissRequest();
 
-		const updatedRecipesList = SearchEngine.searchRecipesByTag(
-			this.selectedOption,
-			false
-		);
+		const keywordLabelList =
+			document.querySelectorAll(".keywords-list__item");
 
-		this.combobox.updateAllListbox(updatedRecipesList);
+		var recipeList = [];
+
+		if (keywordLabelList.length !== 0) {
+			keywordLabelList.forEach((keywordLabel) => {
+				recipeList = SearchEngine.searchRecipesByTag(
+					keywordLabel.id,
+					keywordLabel.innerText,
+					true
+				);
+			});
+
+			this.combobox.updateAllListbox(recipeList);
+		}
 
 		document.querySelector(".recipes-card-grid").innerHTML = "";
 
-		updatedRecipesList.forEach((recipe) => {
+		recipeList.forEach((recipe) => {
 			const recipeCard = Factory.buildRecipeCard(recipe);
 
 			recipeCard.render();
 		});
-	}
-
-	static hideOption(option) {
-		option.classList.remove("hidden-content");
 	}
 
 	/**

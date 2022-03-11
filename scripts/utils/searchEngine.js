@@ -4,6 +4,7 @@ export default class SearchEngine {
 	static init(initialRecipeList = [], updatedRecipeList = []) {
 		this.initialRecipeList = initialRecipeList;
 		this.updatedRecipeList = updatedRecipeList;
+		this.lastUpdatedRecipesList = [];
 	}
 
 	static async searchRecipesMatching(userInput) {
@@ -39,7 +40,7 @@ export default class SearchEngine {
 		}
 	}
 
-	static searchRecipesByTag(selectedOption, aTagWasDissmiss) {
+	static searchRecipesByTag(filterType, selectedOption, aTagWasDissmiss) {
 		var recipeList = this.updatedRecipeList;
 
 		if (this.updatedRecipeList.length === 0 || aTagWasDissmiss) {
@@ -47,27 +48,8 @@ export default class SearchEngine {
 		}
 
 		this.updatedRecipeList = recipeList.filter((recipe) => {
-			if (
-				recipe.appliance
-					.toLowerCase()
-					.includes(selectedOption.toLowerCase()) !== false
-			) {
-				return true;
-			} else {
-				var aUstensilMatch = false;
-
-				recipe.ustensils.forEach((ustensil) => {
-					if (
-						ustensil.toLowerCase().includes(selectedOption.toLowerCase()) !==
-						false
-					) {
-						aUstensilMatch = true;
-					}
-				});
-
-				if (aUstensilMatch) {
-					return true;
-				} else {
+			switch (filterType) {
+				case "filterIngredients":
 					var aIngrendientMatch = false;
 
 					recipe.ingredients.forEach((ingredientInfos) => {
@@ -84,7 +66,36 @@ export default class SearchEngine {
 					});
 
 					return aIngrendientMatch;
-				}
+
+				case "filterAppliances":
+					if (
+						recipe.appliance
+							.toLowerCase()
+							.includes(selectedOption.toLowerCase()) !== false
+					) {
+						return true;
+					} else {
+						return false;
+					}
+
+				case "filterUstensils":
+					var aUstensilMatch = false;
+
+					recipe.ustensils.forEach((ustensil) => {
+						if (
+							ustensil
+								.toLowerCase()
+								.includes(selectedOption.toLowerCase()) !==
+							false
+						) {
+							aUstensilMatch = true;
+						}
+					});
+
+					return aUstensilMatch;
+
+				default:
+					return false;
 			}
 		});
 
