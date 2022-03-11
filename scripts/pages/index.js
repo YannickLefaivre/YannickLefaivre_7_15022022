@@ -41,9 +41,17 @@ async function init() {
 		),
 	];
 
-	filtersForm.forEach((filter) => {
+	var otherCombobox = [];
+
+	for (const filter of filtersForm) {
+		otherCombobox.push(filter);
+	}
+
+	for (const filter of filtersForm) {
+		filter["otherCombobox"] = otherCombobox;
+
 		filter.initEventManagement();
-	});
+	}
 
 	initialRecipeList.forEach((recipe) => {
 		const recipeModel = Factory.buildRecipeCard(recipe);

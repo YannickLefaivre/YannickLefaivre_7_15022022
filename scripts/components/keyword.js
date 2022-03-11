@@ -1,5 +1,6 @@
 import Factory from "../factories/factory.js";
 import SearchEngine from "../utils/searchEngine.js";
+import Combobox from "./combobox.js";
 
 export default class Keyword {
 	/**
@@ -103,12 +104,12 @@ export default class Keyword {
 				);
 			});
 
-			this.associatedCombobox.listbox.update(recipeList);
+			this.associatedCombobox.updateAllListbox(recipeList);
 		} else {
 			recipeList = SearchEngine.initialRecipeList;
 			SearchEngine.updatedRecipeList.length = 0;
 
-			this.associatedCombobox.listbox.update(recipeList);
+			this.associatedCombobox.updateAllListbox(recipeList);
 		}
 
 		recipeList.forEach((recipe) => {

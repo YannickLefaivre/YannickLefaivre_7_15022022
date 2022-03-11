@@ -1,5 +1,6 @@
 import Textbox from "./textbox.js";
 import Listbox from "./listbox.js";
+import Normalize from "../utils/normalize.js";
 
 export default class Combobox {
 	/**
@@ -118,5 +119,49 @@ export default class Combobox {
 				}
 			}
 		}
+	}
+	
+	updateAllListbox(recipeList) {
+		if(this.otherCombobox === undefined) {
+			throw ReferenceError("The property which reference other combobox wasn't set during or before the call of the initEventManagement() method.");
+		}
+
+		const filtersOptionLabel =
+			Normalize.parseFiltersOptionLabel(recipeList);
+
+		this.otherCombobox.forEach((combobox) => {
+			debugger
+			combobox.listbox.element.innerHTML = "";
+
+			switch (combobox.element.id) {
+				case "filterIngredients":
+					filtersOptionLabel.ingredientOptionsLabel.forEach(optionLabel => {
+						for (const option of combobox.listbox.options) {
+							if(option.innerText === optionLabel) {
+								Listbox.hideOption();
+							}
+						}
+					})
+
+					break;
+
+				case "filterAppliances":
+					combobox.listbox.options = combobox.listbox.createOptions(
+						filtersOptionLabel.applianceOptionsLabel
+					);
+
+					return true;
+
+				case "filterUstensils":
+					combobox.listbox.options = combobox.listbox.createOptions(
+						filtersOptionLabel.ustensilOptionsLabel
+					);
+
+					return true;
+
+				default:
+					return false;
+			}
+		});
 	}
 }

@@ -2,6 +2,7 @@ import Keyword from "./keyword.js";
 import Normalize from "../utils/normalize.js";
 import SearchEngine from "../utils/searchEngine.js";
 import Factory from "../factories/factory.js";
+import Combobox from "./combobox.js";
 
 export default class Listbox {
 	/**
@@ -13,7 +14,7 @@ export default class Listbox {
 	 * @param {Textbox} ariaControler
 	 */
 	constructor(
-		ownedCombobox,
+		combobox,
 		trigger,
 		element,
 		options,
@@ -26,9 +27,9 @@ export default class Listbox {
 
 		this.ariaControler = ariaControler;
 
-		this.ownedCombobox = ownedCombobox;
+		this.combobox = combobox;
 
-		this.container = ownedCombobox.element;
+		this.container = combobox.element;
 
 		this.trigger = trigger;
 
@@ -36,9 +37,7 @@ export default class Listbox {
 
 		this.element = element;
 
-		this.options = this.createOptionsDOM(options);
-
-		this.options.forEach((option) => (this.element.innerHTML += option));
+		this.options = this.createOptions(options);
 
 		this.options = this.element.querySelectorAll(".option-list__item");
 
@@ -49,11 +48,9 @@ export default class Listbox {
 
 	/**
 	 *
-	 * @param {[]} optionsLabel
+	 * @param {String[]} optionsLabel
 	 */
-	createOptionsDOM(optionsLabel) {
-		var allOptionDOM = [];
-
+	createOptions(optionsLabel) {
 		optionsLabel.forEach((optionLabel) => {
 			var lowerCaseLabel = optionLabel.toLowerCase();
 
@@ -61,10 +58,10 @@ export default class Listbox {
 
 			const optionDOM = `<li id="${id}" class="option-list__item">${optionLabel}</li>`;
 
-			allOptionDOM.push(optionDOM);
+			this.element.innerHTML += optionDOM;
 		});
 
-		return allOptionDOM;
+		return this.element.getElementsByClassName(".option-list__item");
 	}
 
 	registerEventListener() {
@@ -169,7 +166,7 @@ export default class Listbox {
 		const keyword = new Keyword(
 			`${this.selectedOption.toLowerCase()}`,
 			`${filterType}`,
-			this.ownedCombobox
+			this.combobox
 		);
 
 		keyword.render();
@@ -180,9 +177,8 @@ export default class Listbox {
 			this.selectedOption,
 			false
 		);
-		debugger;
 
-		this.update(updatedRecipesList);
+		this.combobox.updateAllListbox(updatedRecipesList);
 
 		document.querySelector(".recipes-card-grid").innerHTML = "";
 
@@ -193,33 +189,8 @@ export default class Listbox {
 		});
 	}
 
-	update(recipeList) {
-		const filtersOptionLabel =
-			Normalize.parseFiltersOptionLabel(recipeList);
-
-		this.element.innerHTML = "";
-
-		switch (this.container.id) {
-			case "filterIngredients":
-				this.createOptionsDOM(
-					filtersOptionLabel.ingredientOptionsLabel
-				);
-
-				break;
-
-			case "filterAppliances":
-				this.createOptionsDOM(filtersOptionLabel.applianceOptionsLabel);
-
-				return true;
-
-			case "filterUstensils":
-				this.createOptionsDOM(filtersOptionLabel.ustensilOptionsLabel);
-
-				return true;
-
-			default:
-				return false;
-		}
+	static hideOption(option) {
+		option.classList.remove("hidden-content");
 	}
 
 	/**
