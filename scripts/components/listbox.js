@@ -63,17 +63,17 @@ export default class Listbox {
 	}
 
 	registerEventListener(updateOnlyOptionsClickEvent = false) {
-		if(updateOnlyOptionsClickEvent) {
+		if (updateOnlyOptionsClickEvent) {
 			this.container.addEventListener("click", (clickEvent) => {
 				clickEvent.stopPropagation();
 			});
-	
+
 			this.trigger.addEventListener("click", this.onClick.bind(this));
-	
+
 			this.options.forEach((option) => {
 				option.addEventListener("click", this.selectOption.bind(this));
 			});
-	
+
 			document.addEventListener("click", this.onClick.bind(this));
 		} else {
 			this.options.forEach((option) => {
@@ -177,26 +177,11 @@ export default class Listbox {
 
 		keyword.listenDismissRequest();
 
-		const keywordLabelList =
-			document.querySelectorAll(".keywords-list__item");
-
-		var recipeList = [];
-
-		if (keywordLabelList.length !== 0) {
-			keywordLabelList.forEach((keywordLabel) => {
-				recipeList = SearchEngine.searchRecipesByTag(
-					keywordLabel.id,
-					keywordLabel.innerText,
-					true
-				);
-			});
-
-			this.combobox.updateAllListbox(recipeList);
-		}
+		const updatedRecipeList = SearchEngine.searchRecipesWithMultipleTag(this.combobox);
 
 		document.querySelector(".recipes-card-grid").innerHTML = "";
 
-		recipeList.forEach((recipe) => {
+		updatedRecipeList.forEach((recipe) => {
 			const recipeCard = Factory.buildRecipeCard(recipe);
 
 			recipeCard.render();

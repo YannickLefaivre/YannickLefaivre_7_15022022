@@ -4,7 +4,6 @@ export default class SearchEngine {
 	static init(initialRecipeList = [], updatedRecipeList = []) {
 		this.initialRecipeList = initialRecipeList;
 		this.updatedRecipeList = updatedRecipeList;
-		this.lastUpdatedRecipesList = [];
 	}
 
 	static async searchRecipesMatching(userInput) {
@@ -40,65 +39,106 @@ export default class SearchEngine {
 		}
 	}
 
-	static searchRecipesByTag(filterType, selectedOption, aTagWasDissmiss) {
-		var recipeList = this.updatedRecipeList;
+	static searchRecipesByTag(
+		selectedOptions,
+		aTagWasDismiss = false
+	) {
+		var recipeList = null;
 
-		if (this.updatedRecipeList.length === 0 || aTagWasDissmiss) {
+		if (this.updatedRecipeList.length === 0 || aTagWasDismiss) {
 			recipeList = this.initialRecipeList;
+		} else {
+			recipeList = this.updatedRecipeList;
 		}
 
 		this.updatedRecipeList = recipeList.filter((recipe) => {
-			switch (filterType) {
-				case "filterIngredients":
-					var aIngrendientMatch = false;
+			var numberOfTagMatchingThisRecipe = 0;
 
-					recipe.ingredients.forEach((ingredientInfos) => {
-						const ingredientName =
-							ingredientInfos.ingredient.toLowerCase();
+			selectedOptions.forEach((selection) => {
+				switch (selection.id) {
+					case "filterIngredients":
+						var aIngrendientMatch = false;
 
-						if (
-							ingredientName.includes(
-								selectedOption.toLowerCase()
-							)
-						) {
-							aIngrendientMatch = true;
+						recipe.ingredients.forEach((ingredientInfos) => {
+							const ingredientName =
+								ingredientInfos.ingredient.toLowerCase();
+
+							if (
+								ingredientName.includes(selection.innerText.toLowerCase())
+							) {
+								aIngrendientMatch = true;
+							}
+						});
+
+						if (aIngrendientMatch) {
+							numberOfTagMatchingThisRecipe++;
+							return;
 						}
-					});
 
-					return aIngrendientMatch;
+						break;
 
-				case "filterAppliances":
-					if (
-						recipe.appliance
-							.toLowerCase()
-							.includes(selectedOption.toLowerCase()) !== false
-					) {
-						return true;
-					} else {
-						return false;
-					}
-
-				case "filterUstensils":
-					var aUstensilMatch = false;
-
-					recipe.ustensils.forEach((ustensil) => {
+					case "filterAppliances":
 						if (
-							ustensil
+							recipe.appliance
 								.toLowerCase()
-								.includes(selectedOption.toLowerCase()) !==
-							false
+								.includes(selection.innerText.toLowerCase()) !== false
 						) {
-							aUstensilMatch = true;
+							numberOfTagMatchingThisRecipe++;
+							return;
 						}
-					});
 
-					return aUstensilMatch;
+						break;
 
-				default:
-					return false;
+					case "filterUstensils":
+						var aUstensilMatch = false;
+
+						recipe.ustensils.forEach((ustensil) => {
+							if (
+								ustensil
+									.toLowerCase()
+									.includes(selection.innerText.toLowerCase()) !== false
+							) {
+								aUstensilMatch = true;
+							}
+						});
+
+						if (aUstensilMatch) {
+							numberOfTagMatchingThisRecipe++;
+							return;
+						}
+
+						break;
+
+					default:
+						return;
+				}
+			});
+
+			if(numberOfTagMatchingThisRecipe === selectedOptions.length) {
+				return true;
+			} else {
+				return false;
 			}
 		});
 
 		return this.updatedRecipeList;
+	}
+
+	static searchRecipesWithMultipleTag(comboboxAssociatedToTheTag, aTagWasDismiss = false) {
+		const keywordLabelList = document.querySelectorAll(
+			".keywords-list__item"
+		);
+
+		if (keywordLabelList === undefined) {
+			throw TypeError();
+		}
+
+		var recipeList = [];
+
+		recipeList = SearchEngine.searchRecipesByTag(keywordLabelList, aTagWasDismiss);
+
+		comboboxAssociatedToTheTag.updateAllListbox(recipeList);
+
+		return recipeList;
 	}
 }
