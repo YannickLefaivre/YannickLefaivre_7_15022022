@@ -29,30 +29,36 @@ export default class Normalize {
 					ingredients.ingredient.toLowerCase()
 				);
 
-				ingredientOptionsLabel.push(
-					removesWordBetweenParentheses(ingredientOptions)
-				);
+				if (ingredientOptionsLabel.indexOf(ingredientOptions) === -1) {
+					ingredientOptionsLabel.push(
+						removesWordBetweenParentheses(ingredientOptions)
+					);
+				}
 			});
 
 			var applianceOptions = removesWordBetweenParentheses(
 				data.appliance.toLowerCase()
 			);
 
-			applianceOptionsLabel.push(
-				Normalize.firstLetterToUpperCase(applianceOptions)
-			);
+			if (applianceOptionsLabel.indexOf(applianceOptions) === -1) {
+				applianceOptionsLabel.push(
+					Normalize.firstLetterToUpperCase(applianceOptions)
+				);
+			}
 
 			data.ustensils.forEach((ustensil) => {
 				var ustensilOption = Normalize.firstLetterToUpperCase(
 					ustensil.toLowerCase()
 				);
 
-				ustensilOptionsLabel.push(
-					removesWordBetweenParentheses(ustensilOption)
-				);
+				if (ustensilOptionsLabel.indexOf(ustensilOption) === -1) {
+					ustensilOptionsLabel.push(
+						removesWordBetweenParentheses(ustensilOption)
+					);
+				}
 			});
 		});
-		
+
 		/* Removes duplicate from the array of labels of each filter */
 		var filtersOptionLabel = {
 			ingredientOptionsLabel: [...new Set(ingredientOptionsLabel)],

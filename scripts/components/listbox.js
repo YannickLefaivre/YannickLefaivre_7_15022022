@@ -50,11 +50,11 @@ export default class Listbox {
 	 */
 	createOptions(optionsLabel) {
 		optionsLabel.forEach((optionLabel) => {
-			var lowerCaseLabel = optionLabel.toLowerCase();
+			var label = optionLabel.replace(/[\.]*/gi, "");
 
-			var id = lowerCaseLabel.replace(/[\s\(\)\d\.]+/gi, "-");
+			var id = label.toLowerCase().replace(/[\s\(\)\d]+/gi, "-");
 
-			const optionDOM = `<li id="${id}" class="option-list__item">${optionLabel}</li>`;
+			const optionDOM = `<li id="${id}" class="option-list__item">${label}</li>`;
 
 			this.element.innerHTML += optionDOM;
 		});
@@ -148,6 +148,8 @@ export default class Listbox {
 		this.container.parentElement.classList.remove("filter--dropdown-open");
 
 		this.ariaExpandedStateManager.setAttribute("aria-expanded", "false");
+				
+		this.options.forEach(option => option.classList.remove("hidden-content"));
 
 		this.isOpen = false;
 	}

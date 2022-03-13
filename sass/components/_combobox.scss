@@ -108,10 +108,13 @@
 	z-index: 2;
 
 	&__item {
+		display: flex;
 		padding: map-get($option-list-item-padding, x)
 			map-get($option-list-item-padding, y);
 
 		font-size: $main-text-font-size;
+
+		align-items: center;
 
 		color: $text-primary;
 		cursor: default;

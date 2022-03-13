@@ -51,27 +51,25 @@ export default class Combobox {
 			return;
 		}
 
-		if (event.currentTarget.value.length === 0) {
-			this.listbox.options.forEach((option) => {
-				option.classList.remove("hidden-content");
-			});
-		} else {
-			const optionList =
-				this.listbox.element.querySelectorAll(".option-list__item");
+		var userInput = event.currentTarget.value;
 
-			const comboboxOptions = Array.from(optionList);
+		var initialOptionArray = Array.from(this.listbox.options);
 
-			this.nonMatchedOptions = comboboxOptions.filter(
-				(option) =>
-					option.innerText
-						.toLowerCase()
-						.search(event.currentTarget.value.toLowerCase()) === -1
-			);
+		var searchedOptionArray = initialOptionArray.filter(
+			(option) => option.innerText.toLowerCase().includes(userInput.toLowerCase()) === true
+		);
 
-			this.nonMatchedOptions.forEach((option) => {
-				option.classList.add("hidden-content");
-			});
-		}
+		var nonSearchedOptionArray = initialOptionArray.filter(
+			(option) => option.innerText.toLowerCase().includes(userInput.toLowerCase()) === false
+		);
+
+		searchedOptionArray.forEach((searchedOption) =>
+			searchedOption.classList.remove("hidden-content")
+		);
+
+		nonSearchedOptionArray.forEach((nonSearchedOption) =>
+			nonSearchedOption.classList.add("hidden-content")
+		);
 
 		event.preventDefault();
 	}

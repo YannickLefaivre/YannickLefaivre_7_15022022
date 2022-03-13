@@ -743,8 +743,10 @@ button {
 				z-index: 2;
 }
 .option-list__item {
+				display: flex;
 				padding: 0.3rem 0.3rem;
 				font-size: 1.125rem;
+				align-items: center;
 				color: #fff;
 				cursor: default;
 }
@@ -1005,4 +1007,12 @@ button {
 				.recipes-card-grid {
 								grid-template-columns: 14.8rem;
 				}
+}
+.recipes-card-grid--no-result {
+				display: flex;
+				width: 100%;
+				height: 100%;
+				justify-content: center;
+				align-items: center;
+				background-color: #C7BEBE;
 }/*# sourceMappingURL=style.css.map */
