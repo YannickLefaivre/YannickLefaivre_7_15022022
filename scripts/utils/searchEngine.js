@@ -4,16 +4,63 @@ export default class SearchEngine {
 		this.updatedRecipeList = updatedRecipeList;
 	}
 
-	static searchRecipesByTag(selectedOptions, aTagWasDismiss) {
+	static searchRecipesMatching(initialRecipes, userInput) {
+		if (userInput.length >= 3) {
+			var searchedRecipes = [];
+
+			for (const recipe of initialRecipes) {
+				var aIngredientMatchUserInput = false;
+
+				if (recipe.name.includes(userInput) !== false) {
+					searchedRecipes.push(recipe);
+
+					continue;
+				} else if (
+					recipe.description.includes(userInput) !== false
+				) {
+					searchedRecipes.push(recipe);
+
+					continue;
+				} else {
+					for (const ingredients of recipe.ingredients) {
+						if (
+							ingredients.ingredient.includes(userInput) !== false
+						) {
+							aIngredientMatchUserInput = true;
+							break;
+						}
+					}
+
+					if (aIngredientMatchUserInput) {
+						searchedRecipes.push(initialRecipes[i]);
+						continue;
+					}
+				}
+			}
+
+			return searchedRecipes;
+		} else {
+			return null;
+		}
+	}
+	
+	static searchRecipesByTag(selectedOptions, aTagWasDismiss = false) {
 		const userInput = document.getElementById("searchByWordInput").value;
 
-		var mainSearchBarIsEmpty = false;
+		mainSearchBarIsEmpty = false;
 
-		if (userInput === 0) {
+		var recipeList = null;
+
+		if (userInput.length === 0) {
 			mainSearchBarIsEmpty = true;
 		}
 
-		var recipeList = null;
+		if (!mainSearchBarIsEmpty) {
+			this.updatedRecipeList = SearchEngine.searchRecipesMatching(
+				this.initialRecipeList,
+				userInput
+			);
+		}
 
 		if (
 			this.updatedRecipeList.length === 0 ||
@@ -37,7 +84,9 @@ export default class SearchEngine {
 								ingredientInfos.ingredient.toLowerCase();
 
 							if (
-								ingredientName.includes(selection.innerText.toLowerCase())
+								ingredientName.includes(
+									selection.innerText.toLowerCase()
+								)
 							) {
 								aIngrendientMatch = true;
 							}
@@ -54,7 +103,8 @@ export default class SearchEngine {
 						if (
 							recipe.appliance
 								.toLowerCase()
-								.includes(selection.innerText.toLowerCase()) !== false
+								.includes(selection.innerText.toLowerCase()) !==
+							false
 						) {
 							numberOfTagMatchingThisRecipe++;
 							return;
@@ -69,7 +119,9 @@ export default class SearchEngine {
 							if (
 								ustensil
 									.toLowerCase()
-									.includes(selection.innerText.toLowerCase()) !== false
+									.includes(
+										selection.innerText.toLowerCase()
+									) !== false
 							) {
 								aUstensilMatch = true;
 							}
@@ -87,7 +139,7 @@ export default class SearchEngine {
 				}
 			});
 
-			if(numberOfTagMatchingThisRecipe === selectedOptions.length) {
+			if (numberOfTagMatchingThisRecipe === selectedOptions.length) {
 				return true;
 			} else {
 				return false;
@@ -99,7 +151,7 @@ export default class SearchEngine {
 
 	static searchRecipesWithMultipleTag(
 		comboboxAssociatedToTheTag,
-		aTagWasDismiss
+		aTagWasDismiss = false
 	) {
 		const keywordLabelList = document.querySelectorAll(
 			".keywords-list__item"
@@ -111,7 +163,10 @@ export default class SearchEngine {
 
 		var recipeList = [];
 
-		recipeList = SearchEngine.searchRecipesByTag(keywordLabelList, aTagWasDismiss);
+		recipeList = SearchEngine.searchRecipesByTag(
+			keywordLabelList,
+			aTagWasDismiss
+		);
 
 		comboboxAssociatedToTheTag.updateAllListbox(recipeList);
 

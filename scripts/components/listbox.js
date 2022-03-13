@@ -148,6 +148,12 @@ export default class Listbox {
 		this.container.parentElement.classList.remove("filter--dropdown-open");
 
 		this.ariaExpandedStateManager.setAttribute("aria-expanded", "false");
+				
+		this.options.forEach(option => option.classList.remove("hidden-content"));
+
+		this.options.forEach((option) =>
+			option.classList.remove("hidden-content")
+		);
 
 		this.options.forEach((option) =>
 			option.classList.remove("hidden-content")
@@ -181,7 +187,10 @@ export default class Listbox {
 
 		keyword.listenDismissRequest();
 
-		const updatedRecipeList = SearchEngine.searchRecipesWithMultipleTag(this.combobox);
+		const updatedRecipeList = SearchEngine.searchRecipesWithMultipleTag(
+			this.combobox,
+			false
+		);
 
 		document.querySelector(".recipes-card-grid").innerHTML = "";
 

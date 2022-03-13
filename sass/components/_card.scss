@@ -5,7 +5,7 @@
 
     @include rounded-border();
 
-    @include from-small-mobile-and-less {
+    @include from-large-mobile-and-less {
         width: 100%;
         height: auto;
     }
@@ -31,7 +31,7 @@
 
     background-color: transparent;
 
-    @include from-small-mobile-and-less {
+    @include from-large-mobile-and-less {
         height: auto;
         padding: 0 1rem;
     }
@@ -68,7 +68,7 @@
         white-space: nowrap;
         text-overflow: ellipsis;
 
-        @include from-small-mobile-and-less {
+        @include from-medium-mobile-and-less {
             max-width: 7rem;
         }
     }
@@ -81,7 +81,7 @@
 
         color: $text-secondary;
 
-        @include from-small-mobile-and-less {
+        @include from-large-mobile-and-less {
             width: 5.3125rem;
 
             justify-content: flex-end;
@@ -93,7 +93,7 @@
 
             font-weight: bold;
 
-            @include from-small-mobile-and-less {
+            @include from-large-mobile-and-less {
                 margin-left: 0.3rem;
                 font-size: $main-text-font-size-mobile;
             }
@@ -105,7 +105,7 @@
             justify-content: center;
             align-items: center;
             
-            @include from-small-mobile-and-less {
+            @include from-large-mobile-and-less {
                 width: $icons-size;
                 height: $icons-size;
             }
@@ -129,7 +129,7 @@
         -webkit-line-clamp: 8;
         overflow: hidden;
 
-        @include from-small-mobile-and-less {
+        @include from-medium-mobile-and-less {
             font-size: $recipe-card-infos-font-size-mobile;
         }
     }
@@ -138,7 +138,7 @@
         font-size: $recipe-card-infos-font-size;
         color: $text-secondary;
 
-        @include from-small-mobile-and-less {
+        @include from-medium-mobile-and-less {
             font-size: $recipe-card-infos-font-size-mobile;
         }
     }
