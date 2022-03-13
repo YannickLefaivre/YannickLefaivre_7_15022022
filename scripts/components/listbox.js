@@ -148,8 +148,10 @@ export default class Listbox {
 		this.container.parentElement.classList.remove("filter--dropdown-open");
 
 		this.ariaExpandedStateManager.setAttribute("aria-expanded", "false");
-				
-		this.options.forEach(option => option.classList.remove("hidden-content"));
+
+		this.options.forEach((option) =>
+			option.classList.remove("hidden-content")
+		);
 
 		this.isOpen = false;
 	}

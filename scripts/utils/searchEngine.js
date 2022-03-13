@@ -1,51 +1,24 @@
-import { getRecipes } from "../pages/index.js";
-
 export default class SearchEngine {
 	static init(initialRecipeList = [], updatedRecipeList = []) {
 		this.initialRecipeList = initialRecipeList;
 		this.updatedRecipeList = updatedRecipeList;
 	}
 
-	static async searchRecipesMatching(userInput) {
-		if (userInput.length >= 3) {
-			var recipes = await getRecipes();
+	static searchRecipesByTag(selectedOptions, aTagWasDismiss) {
+		const userInput = document.getElementById("searchByWordInput").value;
 
-			searchedRecipes = [];
+		var mainSearchBarIsEmpty = false;
 
-			searchedRecipes = recipes.filter((recipe) => {
-				var ingredientMatchUserInput = false;
-
-				switch (userInput) {
-					case recipe.name.indexOf(userInput) !== -1:
-						return true;
-
-					case recipe.description.indexOf(userInput) !== -1:
-						return true;
-
-					default:
-						recipe.ingredients.forEach((ingredient) => {
-							if (ingredient.ingredient.indexOf(userInput)) {
-								ingredientMatchUserInput = true;
-							}
-						});
-
-						return ingredientMatchUserInput;
-				}
-			});
-
-			return searchedRecipes;
-		} else {
-			return null;
+		if (userInput === 0) {
+			mainSearchBarIsEmpty = true;
 		}
-	}
 
-	static searchRecipesByTag(
-		selectedOptions,
-		aTagWasDismiss = false
-	) {
 		var recipeList = null;
 
-		if (this.updatedRecipeList.length === 0 || aTagWasDismiss) {
+		if (
+			this.updatedRecipeList.length === 0 ||
+			(aTagWasDismiss && mainSearchBarIsEmpty)
+		) {
 			recipeList = this.initialRecipeList;
 		} else {
 			recipeList = this.updatedRecipeList;
@@ -124,7 +97,10 @@ export default class SearchEngine {
 		return this.updatedRecipeList;
 	}
 
-	static searchRecipesWithMultipleTag(comboboxAssociatedToTheTag, aTagWasDismiss = false) {
+	static searchRecipesWithMultipleTag(
+		comboboxAssociatedToTheTag,
+		aTagWasDismiss
+	) {
 		const keywordLabelList = document.querySelectorAll(
 			".keywords-list__item"
 		);
