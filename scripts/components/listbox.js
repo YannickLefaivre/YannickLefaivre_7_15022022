@@ -2,7 +2,6 @@ import Keyword from "./keyword.js";
 import Normalize from "../utils/normalize.js";
 import SearchEngine from "../utils/searchEngine.js";
 import Factory from "../factories/factory.js";
-import Combobox from "./combobox.js";
 
 export default class Listbox {
 	/**
@@ -52,9 +51,7 @@ export default class Listbox {
 		optionsLabel.forEach((optionLabel) => {
 			var label = optionLabel.replace(/[\.]*/gi, "");
 
-			var id = label.toLowerCase().replace(/[\s\(\)\d]+/gi, "-");
-
-			const optionDOM = `<li id="${id}" class="option-list__item">${label}</li>`;
+			const optionDOM = `<li class="option-list__item">${label}</li>`;
 
 			this.element.innerHTML += optionDOM;
 		});

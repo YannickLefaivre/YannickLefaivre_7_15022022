@@ -1,6 +1,5 @@
 import Factory from "../factories/factory.js";
 import SearchEngine from "../utils/searchEngine.js";
-import Combobox from "./combobox.js";
 
 export default class Keyword {
 	/**
