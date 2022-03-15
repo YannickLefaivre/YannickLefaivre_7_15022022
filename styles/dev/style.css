@@ -1011,8 +1011,11 @@ button {
 .recipes-card-grid--no-result {
 				display: flex;
 				width: 100%;
-				height: 100%;
+				height: 50vh;
+				padding: 2rem;
 				justify-content: center;
-				align-items: center;
-				background-color: #685a5a;
+				background-color: transparent;
+}
+.recipes-card-grid--no-result p {
+				font-size: 1.125rem;
 }/*# sourceMappingURL=style.css.map */

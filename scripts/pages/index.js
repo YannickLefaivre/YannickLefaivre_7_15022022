@@ -104,7 +104,7 @@ async function init() {
 			if (userInput.length >= 3) {
 				recipesCardGrid.innerHTML = "";
 
-				if (searchResult === null) {
+				if (searchResult === null || searchResult.length === 0) {
 					recipesCardGrid.classList.add(
 						"recipes-card-grid--no-result"
 					);
