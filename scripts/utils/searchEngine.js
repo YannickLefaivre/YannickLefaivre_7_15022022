@@ -47,7 +47,7 @@ export default class SearchEngine {
 	static searchRecipesByTag(selectedOptions, aTagWasDismiss = false) {
 		const userInput = document.getElementById("searchByWordInput").value;
 
-		mainSearchBarIsEmpty = false;
+		var mainSearchBarIsEmpty = false;
 
 		var recipeList = null;
 
