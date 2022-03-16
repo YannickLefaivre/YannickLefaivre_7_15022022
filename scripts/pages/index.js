@@ -100,9 +100,10 @@ async function init() {
 
 			const recipesCardGrid =
 				document.querySelector(".recipes-card-grid");
+			
+			recipesCardGrid.innerHTML = "";
 
 			if (userInput.length >= 3) {
-				recipesCardGrid.innerHTML = "";
 
 				if (searchResult === null || searchResult.length === 0) {
 					recipesCardGrid.classList.add(
@@ -114,6 +115,10 @@ async function init() {
 
 					filtersForm[0].updateAllListbox(initialRecipes);
 				} else {
+					recipesCardGrid.classList.remove(
+						"recipes-card-grid--no-result"
+					);
+
 					searchResult.forEach((result) => {
 						Factory.buildRecipeCard(result).render();
 					});
@@ -121,6 +126,10 @@ async function init() {
 					filtersForm[0].updateAllListbox(searchResult);
 				}
 			} else {
+				recipesCardGrid.classList.remove(
+				"recipes-card-grid--no-result"
+				);
+
 				initialRecipes.forEach((recipe) =>
 					Factory.buildRecipeCard(recipe).render()
 				);
