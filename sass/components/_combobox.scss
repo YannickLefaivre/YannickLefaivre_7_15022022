@@ -96,7 +96,6 @@
 			$combobox-padding-x -
 				map-get($option-list-item-padding, y)
 		);
-	overflow: hidden;
 
 	display: grid;
 	grid-template-columns: repeat(auto-fit, 13rem);
