@@ -18,29 +18,6 @@ async function getRecipes() {
 	return recipes;
 }
 
-function displaySearchResult(searchResult, userInput) {
-	const recipesCardGrid = document.querySelector(".recipes-card-grid");
-
-	if (userInput.length >= 3) {
-		recipesCardGrid.innerHTML = "";
-
-		if (searchResult === null) {
-			recipesCardGrid.classList.add("recipes-card-grid--no-result");
-
-			recipesCardGrid.innerHTML = `<p>Aucune recette ne correspond à votre critère… vous pouvez
-			chercher « tarte aux pommes », « poisson », etc.</p>`;
-		} else {
-			searchResult.forEach((result) => {
-				Factory.buildRecipeCard(result).render();
-			});
-		}
-	} else {
-		SearchEngine.initialRecipeList.forEach((recipe) =>
-			Factory.buildRecipeCard(recipe).render()
-		);
-	}
-}
-
 async function init() {
 	const initialRecipes = await getRecipes();
 
