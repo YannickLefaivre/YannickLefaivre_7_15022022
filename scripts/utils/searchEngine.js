@@ -8,35 +8,28 @@ export default class SearchEngine {
 		if (userInput.length >= 3) {
 			var searchedRecipes = [];
 
-			for (const recipe of initialRecipes) {
+			searchedRecipes = initialRecipes.filter((recipe) => {
 				var aIngredientMatchUserInput = false;
 
 				if (recipe.name.includes(userInput) !== false) {
-					searchedRecipes.push(recipe);
-
-					continue;
-				} else if (
-					recipe.description.includes(userInput) !== false
-				) {
-					searchedRecipes.push(recipe);
-
-					continue;
+					return true;
+				} else if (recipe.description.includes(userInput) !== false) {
+					return true;
 				} else {
-					for (const ingredients of recipe.ingredients) {
+					recipe.ingredients.forEach((ingredients) => {
 						if (
 							ingredients.ingredient.includes(userInput) !== false
 						) {
 							aIngredientMatchUserInput = true;
-							break;
+							return;
 						}
-					}
+					});
 
 					if (aIngredientMatchUserInput) {
-						searchedRecipes.push(initialRecipes[i]);
-						continue;
+						return true;
 					}
 				}
-			}
+			});
 
 			return searchedRecipes;
 		} else {
@@ -44,14 +37,14 @@ export default class SearchEngine {
 		}
 	}
 	
-	static searchRecipesByTag(selectedOptions, aTagWasDismiss = false) {
+	static searchRecipesByTag(selectedOptions, aTagWasDismiss) {
 		const userInput = document.getElementById("searchByWordInput").value;
 
 		var mainSearchBarIsEmpty = false;
 
 		var recipeList = null;
 
-		if (userInput.length === 0) {
+		if (userInput === 0) {
 			mainSearchBarIsEmpty = true;
 		}
 
@@ -151,7 +144,7 @@ export default class SearchEngine {
 
 	static searchRecipesWithMultipleTag(
 		comboboxAssociatedToTheTag,
-		aTagWasDismiss = false
+		aTagWasDismiss
 	) {
 		const keywordLabelList = document.querySelectorAll(
 			".keywords-list__item"

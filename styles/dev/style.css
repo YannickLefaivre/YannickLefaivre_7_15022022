@@ -743,10 +743,11 @@ button {
 				z-index: 2;
 }
 .option-list__item {
-				display: flex;
 				padding: 0.3rem 0.3rem;
+				overflow: hidden;
 				font-size: 1.125rem;
-				align-items: center;
+				white-space: nowrap;
+				text-overflow: ellipsis;
 				color: #fff;
 				cursor: default;
 }
@@ -872,7 +873,7 @@ button {
 				-webkit-line-clamp: 8;
 				overflow: hidden;
 }
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 320px) {
 				.recipe-card-infos__description {
 								font-size: 0.625rem;
 				}
@@ -881,7 +882,7 @@ button {
 				font-size: 0.75rem;
 				color: #000;
 }
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 320px) {
 				.recipe-card-infos .ingredient {
 								font-size: 0.625rem;
 				}

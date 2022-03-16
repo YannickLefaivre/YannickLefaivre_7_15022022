@@ -51,7 +51,7 @@ export default class Listbox {
 		optionsLabel.forEach((optionLabel) => {
 			var label = optionLabel.replace(/[\.]*/gi, "");
 
-			const optionDOM = `<li class="option-list__item">${label}</li>`;
+			const optionDOM = `<li class="option-list__item" title="${label}">${label}</li>`;
 
 			this.element.innerHTML += optionDOM;
 		});

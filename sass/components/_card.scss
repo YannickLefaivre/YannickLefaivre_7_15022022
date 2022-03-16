@@ -129,7 +129,7 @@
         -webkit-line-clamp: 8;
         overflow: hidden;
 
-        @include from-medium-mobile-and-less {
+        @include from-small-mobile-and-less {
             font-size: $recipe-card-infos-font-size-mobile;
         }
     }
@@ -138,7 +138,7 @@
         font-size: $recipe-card-infos-font-size;
         color: $text-secondary;
 
-        @include from-medium-mobile-and-less {
+        @include from-small-mobile-and-less {
             font-size: $recipe-card-infos-font-size-mobile;
         }
     }

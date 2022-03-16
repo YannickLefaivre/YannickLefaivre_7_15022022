@@ -36,25 +36,17 @@
 			background-color: $color;
 
 			.option-list__item:hover {
-				background-color: scale-color(
-					$color,
-					$lightness: -25%
-				);
+				background-color: scale-color($color, $lightness: -25%);
 			}
 
 			@for $i from 2 through 3 {
 				&:#{nth($interactive-state, $i)} {
-					@include search-bar-input-interactive-state(
-						$color
-					);
+					@include search-bar-input-interactive-state($color);
 				}
 			}
 
 			.active-option {
-				background-color: scale-color(
-					$color,
-					$lightness: -30%
-				);
+				background-color: scale-color($color, $lightness: -30%);
 			}
 		}
 	}
@@ -92,10 +84,7 @@
 	max-width: $combobox-max-width;
 	max-height: 22.5rem;
 	padding: calc(1rem - map-get($option-list-item-padding, x))
-		calc(
-			$combobox-padding-x -
-				map-get($option-list-item-padding, y)
-		);
+		calc($combobox-padding-x - map-get($option-list-item-padding, y));
 	overflow: hidden;
 
 	display: grid;
@@ -108,22 +97,18 @@
 	z-index: 2;
 
 	&__item {
-		display: flex;
-		padding: map-get($option-list-item-padding, x)
-			map-get($option-list-item-padding, y);
+		padding: map-get($option-list-item-padding, x) map-get($option-list-item-padding, y);
+		overflow: hidden;
 
 		font-size: $main-text-font-size;
-
-		align-items: center;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 
 		color: $text-primary;
 		cursor: default;
 
 		&:hover {
-			background-color: scale-color(
-				$bg-primary,
-				$lightness: -30%
-			);
+			background-color: scale-color($bg-primary, $lightness: -30%);
 		}
 	}
 }
