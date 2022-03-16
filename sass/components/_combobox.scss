@@ -108,13 +108,12 @@
 	z-index: 2;
 
 	&__item {
-		display: flex;
-		padding: map-get($option-list-item-padding, x)
-			map-get($option-list-item-padding, y);
+		padding: map-get($option-list-item-padding, x) map-get($option-list-item-padding, y);
+		overflow: hidden;
 
 		font-size: $main-text-font-size;
-
-		align-items: center;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 
 		color: $text-primary;
 		cursor: default;

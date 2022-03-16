@@ -743,10 +743,11 @@ button {
 				z-index: 2;
 }
 .option-list__item {
-				display: flex;
 				padding: 0.3rem 0.3rem;
+				overflow: hidden;
 				font-size: 1.125rem;
-				align-items: center;
+				white-space: nowrap;
+				text-overflow: ellipsis;
 				color: #fff;
 				cursor: default;
 }
