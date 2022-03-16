@@ -18,36 +18,12 @@ async function getRecipes() {
 	return recipes;
 }
 
-function displaySearchResult(searchResult, userInput) {
-	const recipesCardGrid = document.querySelector(".recipes-card-grid");
-
-	if (userInput.length >= 3) {
-		recipesCardGrid.innerHTML = "";
-
-		if (searchResult === null) {
-			recipesCardGrid.classList.add("recipes-card-grid--no-result");
-
-			recipesCardGrid.innerHTML = `<p>Aucune recette ne correspond à votre critère… vous pouvez
-			chercher « tarte aux pommes », « poisson », etc.</p>`;
-		} else {
-			searchResult.forEach((result) => {
-				Factory.buildRecipeCard(result).render();
-			});
-		}
-	} else {
-		SearchEngine.initialRecipeList.forEach((recipe) =>
-			Factory.buildRecipeCard(recipe).render()
-		);
-	}
-}
-
 async function init() {
-	const initialRecipes = await getRecipes();
+	const initialRecipeList = await getRecipes();
 
 	var searchedRecipes = [];
 
-	const filtersOptionLabel =
-		Normalize.parseFiltersOptionLabel(initialRecipes);
+	const filtersOptionLabel = Normalize.parseFiltersOptionLabel(initialRecipeList);
 
 	const filtersForm = [
 		new Combobox(
@@ -76,69 +52,13 @@ async function init() {
 		filter.initEventManagement();
 	}
 
-	initialRecipes.forEach((recipe) => {
+	initialRecipeList.forEach((recipe) => {
 		const recipeModel = Factory.buildRecipeCard(recipe);
 
 		recipeModel.render();
 	});
 
-	SearchEngine.init(initialRecipes, searchedRecipes);
-
-	document
-		.getElementById("searchByWordInput")
-		.addEventListener("input", (event) => {
-			if (event.defaultPrevented) {
-				return;
-			}
-
-			var userInput = event.currentTarget.value;
-
-			var searchResult = SearchEngine.searchRecipesMatching(
-				initialRecipes,
-				userInput
-			);
-
-			const recipesCardGrid =
-				document.querySelector(".recipes-card-grid");
-			
-			recipesCardGrid.innerHTML = "";
-
-			if (userInput.length >= 3) {
-
-				if (searchResult === null || searchResult.length === 0) {
-					recipesCardGrid.classList.add(
-						"recipes-card-grid--no-result"
-					);
-
-					recipesCardGrid.innerHTML = `<p>Aucune recette ne correspond à votre critère… vous pouvez
-			chercher « tarte aux pommes », « poisson », etc.</p>`;
-
-					filtersForm[0].updateAllListbox(initialRecipes);
-				} else {
-					recipesCardGrid.classList.remove(
-						"recipes-card-grid--no-result"
-					);
-
-					searchResult.forEach((result) => {
-						Factory.buildRecipeCard(result).render();
-					});
-
-					filtersForm[0].updateAllListbox(searchResult);
-				}
-			} else {
-				recipesCardGrid.classList.remove(
-				"recipes-card-grid--no-result"
-				);
-
-				initialRecipes.forEach((recipe) =>
-					Factory.buildRecipeCard(recipe).render()
-				);
-
-				filtersForm[0].updateAllListbox(initialRecipes);
-			}
-
-			event.preventDefault();
-		});
+	SearchEngine.init(initialRecipeList, searchedRecipes);
 }
 
 document.addEventListener("DOMContentLoaded", init);

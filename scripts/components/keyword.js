@@ -91,10 +91,7 @@ export default class Keyword {
 
 		document.querySelector(".recipes-card-grid").innerHTML = "";
 
-		const updatedRecipeList = SearchEngine.searchRecipesWithMultipleTag(
-			this.associatedCombobox,
-			true
-		);
+		const updatedRecipeList = SearchEngine.searchRecipesWithMultipleTag(this.associatedCombobox, true);
 
 		updatedRecipeList.forEach((recipe) => {
 			const recipeCard = Factory.buildRecipeCard(recipe);

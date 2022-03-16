@@ -51,7 +51,7 @@ export default class Listbox {
 		optionsLabel.forEach((optionLabel) => {
 			var label = optionLabel.replace(/[\.]*/gi, "");
 
-			const optionDOM = `<li class="option-list__item">${label}</li>`;
+			const optionDOM = `<li class="option-list__item" title="${label}">${label}</li>`;
 
 			this.element.innerHTML += optionDOM;
 		});
@@ -145,12 +145,6 @@ export default class Listbox {
 		this.container.parentElement.classList.remove("filter--dropdown-open");
 
 		this.ariaExpandedStateManager.setAttribute("aria-expanded", "false");
-				
-		this.options.forEach(option => option.classList.remove("hidden-content"));
-
-		this.options.forEach((option) =>
-			option.classList.remove("hidden-content")
-		);
 
 		this.options.forEach((option) =>
 			option.classList.remove("hidden-content")
@@ -184,10 +178,7 @@ export default class Listbox {
 
 		keyword.listenDismissRequest();
 
-		const updatedRecipeList = SearchEngine.searchRecipesWithMultipleTag(
-			this.combobox,
-			false
-		);
+		const updatedRecipeList = SearchEngine.searchRecipesWithMultipleTag(this.combobox);
 
 		document.querySelector(".recipes-card-grid").innerHTML = "";
 

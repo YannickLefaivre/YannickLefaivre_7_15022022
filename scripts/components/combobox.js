@@ -56,17 +56,11 @@ export default class Combobox {
 		var initialOptionArray = Array.from(this.listbox.options);
 
 		var searchedOptionArray = initialOptionArray.filter(
-			(option) =>
-				option.innerText
-					.toLowerCase()
-					.includes(userInput.toLowerCase()) === true
+			(option) => option.innerText.toLowerCase().includes(userInput.toLowerCase()) === true
 		);
 
 		var nonSearchedOptionArray = initialOptionArray.filter(
-			(option) =>
-				option.innerText
-					.toLowerCase()
-					.includes(userInput.toLowerCase()) === false
+			(option) => option.innerText.toLowerCase().includes(userInput.toLowerCase()) === false
 		);
 
 		searchedOptionArray.forEach((searchedOption) =>
@@ -119,18 +113,11 @@ export default class Combobox {
 			);
 		}
 
-		var filtersOptionLabel = {};
-
-		if (recipeList.length !== 0) {
-			filtersOptionLabel = Normalize.parseFiltersOptionLabel(recipeList);
-		}
+		const filtersOptionLabel =
+			Normalize.parseFiltersOptionLabel(recipeList);
 
 		this.otherCombobox.forEach((combobox) => {
 			combobox.listbox.element.innerHTML = "";
-
-			if (recipeList.length === 0) {
-				return;
-			}
 
 			switch (combobox.element.id) {
 				case "filterIngredients":
